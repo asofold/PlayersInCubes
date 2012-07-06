@@ -220,4 +220,16 @@ public final class PicCore{
 		players.clear();
 	}
 
+	public final String getInfoMessage() {
+		final StringBuilder b = new StringBuilder();
+		b.append("[PIC][INFO]");
+		b.append(" cube-size=" + settings.cubeSize);
+		b.append(" cube-dist=" + settings.distCube);
+		b.append(" lazy-dist=" + settings.distLazy);
+		b.append(" lazy-lifetime=" + (settings.durExpireData / 1000));
+//		b.append(" | ");
+		b.append(" | (More: /pic stats)");
+		return b.toString();
+	}
+
 }
