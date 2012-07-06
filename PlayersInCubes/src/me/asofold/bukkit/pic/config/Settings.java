@@ -2,6 +2,9 @@ package me.asofold.bukkit.pic.config;
 
 import java.io.File;
 
+import me.asofold.bukkit.pic.config.compatlayer.CompatConfig;
+import me.asofold.bukkit.pic.config.compatlayer.CompatConfigFactory;
+
 
 /**
  * Configuration settings.
@@ -35,8 +38,8 @@ public class Settings {
 		return false;
 	}
 
-	public static Settings load(File dataFolder) {
-		// TODO 
+	public static Settings load(File file) {
+//		CompatConfig cfg = CompatConfigFactory.getConfig(file);
 		return new Settings();
 	}
 	

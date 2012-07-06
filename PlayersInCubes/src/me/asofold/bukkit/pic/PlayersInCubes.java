@@ -1,5 +1,7 @@
 package me.asofold.bukkit.pic;
 
+import java.io.File;
+
 import me.asofold.bukkit.pic.core.PicCore;
 import me.asofold.bukkit.pic.listeners.PicListener;
 import me.asofold.bukkit.pic.util.Utils;
@@ -22,7 +24,7 @@ public final class PlayersInCubes extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		core.reload(getDataFolder());
+		core.reload(new File(getDataFolder(), "config.yml"));
 		getServer().getPluginManager().registerEvents(listener, this);
 		System.out.println("[PIC] " + getDescription().getFullName() +" is now enabled.");
 	}
@@ -38,7 +40,7 @@ public final class PlayersInCubes extends JavaPlugin {
 		if (len > 0) cmd = args[0].trim().toLowerCase();
 		if (cmd.equals("reload") && len == 1){
 			if (!Utils.checkPerm(sender, "playersincubes.reload")) return true;
-			if (core.reload(getDataFolder())) sender.sendMessage("[PIC] Settings reloaded.");
+			if (core.reload(new File(getDataFolder(), "config.yml"))) sender.sendMessage("[PIC] Settings reloaded.");
 			else sender.sendMessage("[PIC] Reloading the settings failed.");
 			return true;
 		}

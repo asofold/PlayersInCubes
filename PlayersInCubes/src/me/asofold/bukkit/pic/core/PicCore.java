@@ -67,8 +67,8 @@ public final class PicCore{
 		
 	}
 
-	public boolean reload(File dataFolder) {
-		Settings settings = Settings.load(dataFolder);
+	public boolean reload(File file) {
+		Settings settings = Settings.load(file);
 		if (settings != null){
 			applySettings(settings);
 			return true;
