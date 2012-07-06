@@ -1,11 +1,11 @@
 name: PlayersInCubes
 main: me.asofold.bukkit.pic.PlayersInCubes
-version: 0.0.0
+version: 1.0.0
 
 commands:
   playersincubes:
     description: 'Manage PlayersInCubes.'
-    usage: '/pcubes ...: reload |'
+    usage: '/pcubes ...: reload | enable | disable | stats | stats reset |'
     aliases:
     - pic
     - pcubes
