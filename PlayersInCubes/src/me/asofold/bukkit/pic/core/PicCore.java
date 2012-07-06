@@ -48,8 +48,9 @@ public final class PicCore{
 		}
 		else{
 			pp.checkOut();
+			players.remove(pp.playerName); // TODO: maybe hold data longer.
 		}
-		players.remove(pp.playerName); // TODO: maybe hold data longer.
+		
 	}
 
 	public boolean reload(File dataFolder) {
