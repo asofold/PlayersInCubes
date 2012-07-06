@@ -39,9 +39,10 @@ public class Settings {
 	 */
 	public long durExpireData = 10000;
 	
-	public boolean save(File dataFolder){
-		// TODO
-		return false;
+	public boolean save(File file){
+		CompatConfig cfg  = CompatConfigFactory.getConfig(file);
+		toConfig(cfg);
+		return cfg.save();
 	}
 	
 	public static CompatConfig getDefaultConfig(){
