@@ -16,14 +16,14 @@ public final class PlayersInCubes extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		core.clear();
-		System.out.println("[Pic]" + getDescription().getFullName() +" is has been disabled.");
+		System.out.println("[Pic] " + getDescription().getFullName() +" is has been disabled.");
 	}
 
 	@Override
 	public void onEnable() {
 		core.reload(getDataFolder());
 		getServer().getPluginManager().registerEvents(listener, this);
-		System.out.println("[Pic]" + getDescription().getFullName() +" is now enabled.");
+		System.out.println("[Pic] " + getDescription().getFullName() +" is now enabled.");
 	}
 	
 	@Override
