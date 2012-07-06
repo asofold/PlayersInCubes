@@ -29,9 +29,9 @@ public final class Cube extends CubePos{
 		
 		// Real coordinates for the middle of the cube:
 		final int sz2 = size / 2;
-		this.mX = x + sz2;
-		this.mY = y + sz2;
-		this.mZ = z + sz2;
+		this.mX = this.x * size + sz2;
+		this.mY = this.y * size + sz2;
+		this.mZ = this.z * size + sz2;
 	}
 	
 	/**
