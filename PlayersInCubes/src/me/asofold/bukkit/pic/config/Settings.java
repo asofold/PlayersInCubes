@@ -4,6 +4,7 @@ import java.io.File;
 
 import me.asofold.bukkit.pic.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.pic.config.compatlayer.CompatConfigFactory;
+import me.asofold.bukkit.pic.config.compatlayer.ConfigUtil;
 
 
 /**
@@ -12,6 +13,11 @@ import me.asofold.bukkit.pic.config.compatlayer.CompatConfigFactory;
  *
  */
 public class Settings {
+	
+	static final String pathCubeSize = "cube.size";
+	static final String pathDistCube = "cube.distance";
+	static final String pathDistLazy = "lazy.dist";
+	static final String pathDurExpireData = "lazy.lifetime";
 	
 	/**
 	 * Size of a cube.
@@ -37,10 +43,38 @@ public class Settings {
 		// TODO
 		return false;
 	}
+	
+	public static CompatConfig getDefaultConfig(){
+		CompatConfig cfg = CompatConfigFactory.getConfig(null);
+		Settings ref = new Settings();
+		ref.toConfig(cfg);
+		return cfg;
+	}
 
+	private void toConfig(CompatConfig cfg) {
+		cfg.set(pathCubeSize, cubeSize);
+		cfg.set(pathDistCube, distCube);
+		cfg.set(pathDistLazy, distLazy);
+		cfg.set(pathDurExpireData, durExpireData / 1000); // Saved in seconds
+	}
+
+	/**
+	 * Does update defaults and save back if changed. 
+	 * @param file
+	 * @return
+	 */
 	public static Settings load(File file) {
-//		CompatConfig cfg = CompatConfigFactory.getConfig(file);
-		return new Settings();
+		CompatConfig cfg = CompatConfigFactory.getConfig(file);
+		cfg.load();
+		CompatConfig defaults = getDefaultConfig();
+		if (ConfigUtil.forceDefaults(defaults, cfg)) cfg.save();
+		Settings settings = new Settings();
+		Settings ref = new Settings();
+		settings.cubeSize = cfg.getInt(pathCubeSize, ref.cubeSize);
+		settings.distCube = cfg.getInt(pathDistCube, ref.distCube);
+		settings.distLazy = cfg.getInt(pathDistLazy, ref.distLazy);
+		settings.durExpireData = cfg.getLong(pathDurExpireData, ref.durExpireData / 1000) * 1000; // Saved in seconds
+		return settings;
 	}
 	
 }
