@@ -16,14 +16,14 @@ public final class PlayersInCubes extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		core.clear();
-		System.out.println("[Pic] " + getDescription().getFullName() +" is has been disabled.");
+		System.out.println("[PIC] " + getDescription().getFullName() +" is has been disabled.");
 	}
 
 	@Override
 	public void onEnable() {
 		core.reload(getDataFolder());
 		getServer().getPluginManager().registerEvents(listener, this);
-		System.out.println("[Pic] " + getDescription().getFullName() +" is now enabled.");
+		System.out.println("[PIC] " + getDescription().getFullName() +" is now enabled.");
 	}
 	
 	@Override
@@ -37,8 +37,8 @@ public final class PlayersInCubes extends JavaPlugin {
 		if (len > 0) cmd = args[0].trim().toLowerCase();
 		if (cmd.equals("reload") && len == 1){
 			if (!Utils.checkPerm(sender, "playersincubes.reload")) return true;
-			if (core.reload(getDataFolder())) sender.sendMessage("[Pic] Settings reloaded.");
-			else sender.sendMessage("[Pic] Reloading the settings failed.");
+			if (core.reload(getDataFolder())) sender.sendMessage("[PIC] Settings reloaded.");
+			else sender.sendMessage("[PIC] Reloading the settings failed.");
 			return true;
 		}
 		return false;
