@@ -93,7 +93,8 @@ public final class CubeServer {
 			if (szRem > 0) core.renderBlind(pp, doRem);
 		}
 		else szRem = 0;
-		core.renderSeen(pp, seen); // Contains all already seen people, though !
+		seen.remove(pp.playerName);
+		if (!seen.isEmpty()) core.renderSeen(pp, seen); // Contains all already seen people, though !
 		// Add stats:
 		PicCore.stats.addStats(PicCore.idPPCubes, pp.cubes.size());
 		PicCore.stats.addStats(PicCore.idPPSeen, seen.size());
