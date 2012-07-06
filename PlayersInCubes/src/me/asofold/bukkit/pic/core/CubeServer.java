@@ -47,11 +47,12 @@ public final class CubeServer {
 	 */
 	public final void update(final PicPlayer pp, final int distCube) {
 		// Dumb: check all cubes within distance
+		// opt: calculate min/max here ?
 		for (int x = pp.x - distCube; x < pp.x + distCube; x += cubeSize){
 			for (int y = pp.y - distCube; y < pp.y + distCube; y += cubeSize){
 				for (int z = pp.z - distCube; z < pp.z + distCube; z += cubeSize){
 					// TODO: optimize here and just get the hash later 
-					final CubePos pos = new CubePos(x, y, z);
+					final CubePos pos = new CubePos(x / cubeSize, y / cubeSize, z / cubeSize);
 					if (pp.cubes.contains(pos)) continue;
 					CubeData data = cubes.get(pos);
 					if (data == null){
