@@ -1,6 +1,8 @@
 package me.asofold.bukkit.pic.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,14 +48,20 @@ public final class CubeServer {
 	 * @param distCube Maximal distance to cube centers.
 	 */
 	public final void update(final PicPlayer pp, final int distCube) {
+		// Remove cubes that are too far.
+		final Set<String> rem = pp.checkCubes(distCube);
 		// Dumb: check all cubes within distance
 		// opt: calculate min/max here ?
+		final Set<String> seen = new HashSet<String>();
 		for (int x = pp.x - distCube; x < pp.x + distCube; x += cubeSize){
 			for (int y = pp.y - distCube; y < pp.y + distCube; y += cubeSize){
 				for (int z = pp.z - distCube; z < pp.z + distCube; z += cubeSize){
 					// TODO: optimize here and just get the hash later 
 					final CubePos pos = new CubePos(x / cubeSize, y / cubeSize, z / cubeSize);
-					if (pp.cubes.contains(pos)) continue;
+					if (pp.cubes.contains(pos)){
+						seen.addAll(cubes.get(pos).canView);
+						continue;
+					}
 					CubeData data = cubes.get(pos);
 					if (data == null){
 						// create new one
@@ -61,14 +69,23 @@ public final class CubeServer {
 						cubes.put(pos, data);
 						data.add(pp);
 						pp.cubes.add(data);
-					}
-					else if (!data.canView.contains(pp.playerName)){
+					} else{
+						seen.addAll(data.canView);
 						data.add(pp);
 						pp.cubes.add(data);
 					}
 				}
 			}
 		}
+		// process visibility
+		if (!rem.isEmpty()){
+			final ArrayList<String> doRem = new ArrayList<String>(rem.size());
+			for (final String name : rem){
+				if (!seen.contains(name)) doRem.add(name);
+			}
+			if (!doRem.isEmpty()) core.renderBlind(pp, doRem);
+		}
+		core.renderSeen(pp, seen); // Contains all already seen people, though !
 	}
 	
 }

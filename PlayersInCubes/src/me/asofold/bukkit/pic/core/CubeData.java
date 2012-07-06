@@ -25,12 +25,12 @@ public final class CubeData {
 
 	public void remove(PicPlayer pp) {
 		canView.remove(pp.playerName);
-		server.renderBlind(pp, canView);
+//		server.renderBlind(pp, canView);
 		if (canView.isEmpty()) server.cubeEmpty(this);
 	}
 	
 	public void add(PicPlayer pp) {
-		if (!canView.isEmpty()) server.renderSeen(pp, canView);
+//		if (!canView.isEmpty()) server.renderSeen(pp, canView);
 		canView.add(pp.playerName);
 	}
 

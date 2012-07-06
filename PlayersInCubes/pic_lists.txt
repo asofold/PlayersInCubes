@@ -3,9 +3,9 @@ PlayersInCubes - Lists
 
 "Simple" attempt to have players see each other or not based on their distance.
 
-- Equality approach: Sectors know which players can see it and which are inside. 
-    If one player cant see a sector anymore, the players in the sector cant see that player anymore neither.
-- Location Heuristic: To prevent too much checking, players are checked when they move far enough (or time enough has passed).
+LICENSE
+------------------
+"Minimal" for a Bukkit plugin.
 
 
 STRUCTURES
@@ -22,7 +22,28 @@ use identities ?
 
 POSSIBLE OPTIMIZATIONS
 -------------------------------
-- Lots, supposedly
+- More optimization is possible with remembering the cube a player is in, though that might contradict distCube
+- renderBlind: render Blind with all players at once.
 - Cube lookup: Prevent object creation, lookup by hash directly (refactor to arrays + modulo?)
 - Storing cubes: use array + modulo to get past all the keys, entry sets iterations over objects. (CubeServer) 
 - Store some objects longer / permanently, to avoid creating them newly.
+
+POSSIBLE FEATURES
+------------------------------
+- Permanently loaded cubes with special properties + API (turn lights in town on ...).
+
+
+STACK
+-----------------------------------
+
+add a way to see all others always.
+
+Stats for timings 
+Stats for number of cubes.
+
+Configuration + default settings + reloading 
+
+make work with smaller than cubeSIze distCube
+
+VERSION HISTORY
+----------------------------------

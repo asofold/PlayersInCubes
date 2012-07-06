@@ -1,9 +1,9 @@
 package me.asofold.bukkit.pic.core;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import me.asofold.bukkit.pic.config.Settings;
 
@@ -47,7 +47,7 @@ public final class PicCore{
 			}
 		}
 		else{
-			pp.checkOut();
+			renderBlind(pp, pp.checkOut());
 			players.remove(pp.playerName); // TODO: maybe hold data longer.
 		}
 		
@@ -87,7 +87,7 @@ public final class PicCore{
 	}
 	
 
-	public final void renderBlind(final PicPlayer pp, final Set<String> names) {
+	public final void renderBlind(final PicPlayer pp, final Collection<String> names) {
 		final Player player = pp.bPlayer;
 		for (final String name : names){
 			final PicPlayer opp = players.get(name);
@@ -97,7 +97,7 @@ public final class PicCore{
 		}
 	}
 	
-	public final void renderSeen(final PicPlayer pp, final Set<String> names) {
+	public final void renderSeen(final PicPlayer pp, final Collection<String> names) {
 		final Player player = pp.bPlayer;
 		for (final String name : names){
 			final PicPlayer opp = players.get(name);
@@ -147,9 +147,6 @@ public final class PicCore{
 		pp.x = x;
 		pp.y = y;
 		pp.z = z;
-		
-		// Remove cubes that are too far.
-		pp.checkCubes(settings.distCube);
 		
 		// Add player to all cubes !
 		getCubeServer(world).update(pp, settings.distCube);

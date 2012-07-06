@@ -32,11 +32,14 @@ public class PicPlayer {
 	/**
 	 * Remove all cube associations.
 	 */
-	public final void checkOut() {
+	public final Set<String> checkOut() {
+		final Set<String> out = new HashSet<String>();
 		for (final CubeData cube : cubes){
 			cube.remove(this);
+			if (!cube.canView.isEmpty()) out.addAll(cube.canView);
 		}
 		cubes.clear();
+		return out;
 	}
 	
 	public  final boolean inRange(final int x, final int y, final int z, final int distLazy) {
@@ -47,15 +50,18 @@ public class PicPlayer {
 	 * Remove cubes that are more far than distCube.
 	 * @param distCube
 	 */
-	public final void checkCubes(final int distCube) {
+	public final Set<String> checkCubes(final int distCube) {
 		final List<CubeData> rem = new LinkedList<CubeData>();
+		final Set<String> out = new HashSet<String>();
 		for (final CubeData cube : cubes){
 			if (!cube.cube.inRange(x, y, z, distCube)){
 				cube.remove(this);
 				rem.add(cube);
+				out.addAll(cube.canView);
 			}
 		}
 		cubes.removeAll(rem);
+		return out;
 	}
 	
 }
