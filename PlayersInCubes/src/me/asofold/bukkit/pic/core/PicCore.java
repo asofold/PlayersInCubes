@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.asofold.bukkit.pic.config.Settings;
+import me.asofold.bukkit.pic.stats.Stats;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,7 +17,20 @@ import org.bukkit.entity.Player;
  *
  */
 public final class PicCore{
-
+	
+	
+	
+	static final Stats stats = new Stats("[Pic]");
+	
+	static final Integer idPPCubes = stats.getNewId("pp_cubes");
+	static final Integer idPPSeen = stats.getNewId("pp_seen");
+	static final Integer idPPRemove = stats.getNewId("pp_remove");
+	
+	static{
+		stats.setLogStats(false);
+		stats.setShowRange(true);
+	}
+	
 	/**
 	 * Settings.
 	 */
@@ -160,10 +174,14 @@ public final class PicCore{
 	private final CubeServer getCubeServer(final String world) {
 		CubeServer server = cubeServers.get(world);
 		if (server == null){
-			server = new CubeServer(this, settings.cubeSize);
+			server = new CubeServer(world, this, settings.cubeSize);
 			cubeServers.put(world, server);
 		}
 		return server;
+	}
+	
+	public final Stats getStats(){
+		return stats;
 	}
 	
 	public void clear() {

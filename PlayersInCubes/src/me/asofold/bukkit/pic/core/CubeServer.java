@@ -19,7 +19,12 @@ public final class CubeServer {
 
 	public final int cubeSize;
 
-	public CubeServer(final PicCore core, int cubeSize){
+	public final String world;
+	private final Integer idCubes;
+
+	public CubeServer(final String world, final PicCore core, int cubeSize){
+		this.world  = world;
+		idCubes = PicCore.stats.getNewId("all_cubes_" + world);
 		this.core = core;
 		this.cubeSize = cubeSize;
 	}
@@ -78,14 +83,22 @@ public final class CubeServer {
 			}
 		}
 		// process visibility
+		final int szRem;
 		if (!rem.isEmpty()){
 			final ArrayList<String> doRem = new ArrayList<String>(rem.size());
 			for (final String name : rem){
 				if (!seen.contains(name)) doRem.add(name);
 			}
-			if (!doRem.isEmpty()) core.renderBlind(pp, doRem);
+			szRem = doRem.size();
+			if (szRem > 0) core.renderBlind(pp, doRem);
 		}
+		else szRem = 0;
 		core.renderSeen(pp, seen); // Contains all already seen people, though !
+		// Add stats:
+		PicCore.stats.addStats(PicCore.idPPCubes, pp.cubes.size());
+		PicCore.stats.addStats(PicCore.idPPSeen, seen.size());
+		PicCore.stats.addStats(PicCore.idPPRemove, szRem);
+		PicCore.stats.addStats(idCubes, cubes.size());
 	}
 	
 }

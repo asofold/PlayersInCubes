@@ -30,7 +30,10 @@ public class Settings {
 	 */
 	public long durExpireData = 10000;
 	
-	
+	public boolean save(File dataFolder){
+		// TODO
+		return false;
+	}
 
 	public static Settings load(File dataFolder) {
 		// TODO 

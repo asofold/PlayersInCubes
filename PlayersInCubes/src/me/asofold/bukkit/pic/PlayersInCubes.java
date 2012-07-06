@@ -6,6 +6,7 @@ import me.asofold.bukkit.pic.util.Utils;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PlayersInCubes extends JavaPlugin {
@@ -39,6 +40,11 @@ public final class PlayersInCubes extends JavaPlugin {
 			if (!Utils.checkPerm(sender, "playersincubes.reload")) return true;
 			if (core.reload(getDataFolder())) sender.sendMessage("[PIC] Settings reloaded.");
 			else sender.sendMessage("[PIC] Reloading the settings failed.");
+			return true;
+		}
+		else if (cmd.equals("stats") && len == 1){
+			if (!Utils.checkPerm(sender, "playersincubes.stats.view")) return true;
+			sender.sendMessage(core.getStats().getStatsStr(sender instanceof Player));
 			return true;
 		}
 		return false;

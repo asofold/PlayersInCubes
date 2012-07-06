@@ -36,20 +36,26 @@ POSSIBLE FEATURES
 STACK
 -----------------------------------
 
+
+***
 add a way to see all others always.
 
-*** 
+*** RELEASE
+***
+intended command features:     usage: '/playersincubes ...: reload | info | disable | enable | cleanup  | stats reset | cleanup | Aliases: pic, pcubes'
 
-Stats for timings ?
+
+Stats for some timings ?
 
 *** MINIMUM RELEASE
 
-Stats for number of cubes !
+Stats for add, remove
+Stats for number of cubes (PicPlayer, CubeServer)
 
 Add disabling and enabling (persistent)!
-
-Configuration + default settings + reloading 
-
+ 
+- Settings.load + save
+- applySettings + checkOutAll + checkAll
 
 VERSION HISTORY
 ----------------------------------
