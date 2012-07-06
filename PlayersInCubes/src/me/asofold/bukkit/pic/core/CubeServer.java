@@ -51,7 +51,7 @@ public final class CubeServer {
 			for (int y = pp.y - distCube; y < pp.y + distCube; y += cubeSize){
 				for (int z = pp.z - distCube; z < pp.z + distCube; z += cubeSize){
 					// TODO: optimize here and just get the hash later 
-					final CubePos pos = new Cube(x, y, z, cubeSize);
+					final CubePos pos = new CubePos(x, y, z);
 					if (pp.cubes.contains(pos)) continue;
 					CubeData data = cubes.get(pos);
 					if (data == null){
@@ -60,6 +60,7 @@ public final class CubeServer {
 						cubes.put(pos, data);
 					}
 					data.add(pp);
+					pp.cubes.add(data);
 				}
 			}
 		}
