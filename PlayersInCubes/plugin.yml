@@ -1,5 +1,5 @@
 name: PlayersInCubes
-main: me.asofold.bukkit.pins.PlayersInCubes
+main: me.asofold.bukkit.pic.PlayersInCubes
 version: 0.0.0
 
 commands:
