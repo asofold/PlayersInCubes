@@ -49,6 +49,12 @@ public final class PlayersInCubes extends JavaPlugin {
 			sender.sendMessage(core.getStats().getStatsStr(sender instanceof Player));
 			return true;
 		}
+		else if (len == 2 && cmd.equals("stats") && args[1].equalsIgnoreCase("reset")){
+			if (!Utils.checkPerm(sender, "playersincubes.stats.reset")) return true;
+			core.getStats().clear();
+			sender.sendMessage("[PIC] Stats reset.");
+			return true;
+		}
 		return false;
 	}
 	
