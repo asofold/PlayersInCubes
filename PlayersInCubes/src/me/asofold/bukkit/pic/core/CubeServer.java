@@ -100,5 +100,9 @@ public final class CubeServer {
 		PicCore.stats.addStats(PicCore.idPPRemove, szRem);
 		PicCore.stats.addStats(idCubes, cubes.size());
 	}
+
+	public final void clear() {
+		cubes.clear();
+	}
 	
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import me.asofold.bukkit.pic.config.Settings;
 import me.asofold.bukkit.pic.stats.Stats;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -184,14 +185,39 @@ public final class PicCore{
 		return stats;
 	}
 	
-	public void clear() {
-		// TODO Auto-generated method stub
-		
+	private final void applySettings(final Settings settings) {
+		// Later: maybe try for a lazy transition or a hard one depending on changes.
+		this.settings = settings;
+		cleanup();
+	}
+
+	/**
+	 * Remove all players, remove all data, check in all players again.
+	 */
+	public final void cleanup() {
+		clear();
+		checkAllOnlinePlayers();
 	}
 	
-	private void applySettings(Settings settings) {
-		this.settings = settings;
-		// ...
+	public final void checkAllOnlinePlayers() {
+		for (final Player player : Bukkit.getOnlinePlayers()){
+			check(player, player.getLocation());
+		}
+	}
+
+	public final void clear(){
+		removeAllPlayers();
+		for (final CubeServer server : cubeServers.values()){
+			server.clear();
+		}
+		cubeServers.clear();
+	}
+
+	private final void removeAllPlayers() {
+		for (final PicPlayer pp : players.values()){
+			renderBlind(pp, pp.checkOut());
+		}
+		players.clear();
 	}
 
 }
