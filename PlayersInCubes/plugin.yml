@@ -5,7 +5,7 @@ version: 1.0.0
 commands:
   playersincubes:
     description: 'Manage PlayersInCubes.'
-    usage: '/playersincubes ...: reload | info | disable | enable | cleanup | stats | stats reset | cleanup | Aliases: pic, pcubes'
+    usage: '/playersincubes ...: reload | info | cleanup | disable | enable | stats | stats reset | Aliases: pic, pcubes'
     aliases:
     - pic
     - pcubes
