@@ -17,25 +17,25 @@ public final class PlayersInCubes extends JavaPlugin {
 	private final PicListener listener = new PicListener(core);
 
 	@Override
-	public void onDisable() {
+	public final void onDisable() {
 		core.clear();
 		System.out.println("[PIC] " + getDescription().getFullName() +" is has been disabled.");
 	}
 
 	@Override
-	public void onEnable() {
+	public final void onEnable() {
 		core.reload(new File(getDataFolder(), "config.yml"));
 		getServer().getPluginManager().registerEvents(listener, this);
 		System.out.println("[PIC] " + getDescription().getFullName() +" is now enabled.");
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
+	public final boolean onCommand(final CommandSender sender, final Command command,
+			String label, final String[] args) {
 		if (command != null) label = command.getLabel();
 		label = label.trim().toLowerCase();
 		if (!label.equals("playersincubes")) return false;
-		int len = args.length;
+		final int len = args.length;
 		String cmd = null;
 		if (len > 0) cmd = args[0].trim().toLowerCase();
 		if (len == 1 && cmd.equals("reload")){
