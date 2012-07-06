@@ -58,9 +58,13 @@ public final class CubeServer {
 						// create new one
 						data = new CubeData(new Cube(x, y, z, cubeSize), this);
 						cubes.put(pos, data);
+						data.add(pp);
+						pp.cubes.add(data);
 					}
-					data.add(pp);
-					pp.cubes.add(data);
+					else if (!data.canView.contains(pp.playerName)){
+						data.add(pp);
+						pp.cubes.add(data);
+					}
 				}
 			}
 		}
