@@ -38,12 +38,18 @@ STACK
 
 add a way to see all others always.
 
-Stats for timings 
-Stats for number of cubes.
+*** 
+
+Stats for timings ?
+
+*** MINIMUM RELEASE
+
+Stats for number of cubes !
+
+Add disabling and enabling (persistent)!
 
 Configuration + default settings + reloading 
 
-make work with smaller than cubeSIze distCube
 
 VERSION HISTORY
 ----------------------------------
