@@ -1,5 +1,11 @@
 package me.asofold.bukkit.pic.core;
 
+/**
+ * Hash taken from some web reference about spatial hashing (very common).
+ * TODO: maybe reference some paper.
+ * @author mc_dev
+ *
+ */
 public class CubePos {
 	
 	private static final int p1 = 73856093;
