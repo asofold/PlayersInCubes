@@ -38,13 +38,13 @@ public final class PlayersInCubes extends JavaPlugin {
 		int len = args.length;
 		String cmd = null;
 		if (len > 0) cmd = args[0].trim().toLowerCase();
-		if (cmd.equals("reload") && len == 1){
+		if (len == 1 && cmd.equals("reload")){
 			if (!Utils.checkPerm(sender, "playersincubes.reload")) return true;
 			if (core.reload(new File(getDataFolder(), "config.yml"))) sender.sendMessage("[PIC] Settings reloaded.");
 			else sender.sendMessage("[PIC] Reloading the settings failed.");
 			return true;
 		}
-		else if (cmd.equals("stats") && len == 1){
+		else if (len == 1 && cmd.equals("stats")){
 			if (!Utils.checkPerm(sender, "playersincubes.stats.view")) return true;
 			sender.sendMessage(core.getStats().getStatsStr(sender instanceof Player));
 			return true;
