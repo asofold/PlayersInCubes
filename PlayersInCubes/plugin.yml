@@ -1,0 +1,11 @@
+name: PlayersInCubes
+main: me.asofold.bukkit.pins.PlayersInCubes
+version: 0.0.0
+
+commands:
+  playersincubes:
+    description: 'Manage PlayersInCubes.'
+    usage: '/pcubes ...: reload |'
+    aliases:
+    - pic
+    - pcubes

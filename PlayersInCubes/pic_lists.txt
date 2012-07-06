@@ -1,0 +1,28 @@
+PlayersInCubes - Lists
+-----------------------------------------
+
+"Simple" attempt to have players see each other or not based on their distance.
+
+- Equality approach: Sectors know which players can see it and which are inside. 
+    If one player cant see a sector anymore, the players in the sector cant see that player anymore neither.
+- Location Heuristic: To prevent too much checking, players are checked when they move far enough (or time enough has passed).
+
+
+STRUCTURES
+------------------
+- World split in chunks of equal size.
+- HashMap with one hash (3 dim).
+- Sectors keep Sets for players that are inside and players that can see the sector.
+- A position is kept for every player, that will be reset upon moving far enough (or probably timeout).
+- A player gets registered in cubes that are within a certain distance.
+
+use identities ?
+
+
+
+POSSIBLE OPTIMIZATIONS
+-------------------------------
+- Lots, supposedly
+- Cube lookup: Prevent object creation, lookup by hash directly (refactor to arrays + modulo?)
+- Storing cubes: use array + modulo to get past all the keys, entry sets iterations over objects. (CubeServer) 
+- Store some objects longer / permanently, to avoid creating them newly.
