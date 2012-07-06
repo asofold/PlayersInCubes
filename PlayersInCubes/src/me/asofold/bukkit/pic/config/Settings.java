@@ -18,7 +18,7 @@ public class Settings {
 	/**
 	 * Distance at which players get associated with cubes.
 	 */
-	public int distCube = 25;
+	public int distCube = 16;
 	
 	/**
 	 * Distance a player must take to get re checked.
