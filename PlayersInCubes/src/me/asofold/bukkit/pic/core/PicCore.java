@@ -38,7 +38,7 @@ public final class PicCore{
 	 */
 	public final void checkOut(final Player player) {
 		final String playerName = player.getName();
-		final PicPlayer pp = getPicPlayer(playerName, false);
+		final PicPlayer pp = players.get(playerName);
 		if (pp == null){ // contract ?
 			for (final PicPlayer opp : players.values()){
 				if (opp.playerName.equals(playerName)) continue;
@@ -72,14 +72,17 @@ public final class PicCore{
 	}
 	
 	/**
-	 * 
-	 * @param playerName Exact player naming.
-	 * @param create
+	 * Get PicPlayer, put to internals, if not present.
+	 * @param player
 	 * @return
 	 */
-	private final PicPlayer getPicPlayer(final String playerName, boolean create) {
-		// TODO Auto-generated method stub
-		return null;
+	private final PicPlayer getPicPlayer(final Player player){
+		final String name = player.getName();
+		final PicPlayer pp = players.get(name);
+		if (pp != null) return pp;
+		final PicPlayer npp = new PicPlayer(player);
+		players.put(name, npp);
+		return npp;
 	}
 	
 
@@ -109,8 +112,7 @@ public final class PicCore{
 	 * @param to NOT NULL
 	 */
 	public final void check(final Player player, final Location to) {
-		final String playerName = player.getName();
-		final PicPlayer pp =  getPicPlayer(playerName, true);
+		final PicPlayer pp =  getPicPlayer(player);
 		
 		final String world = to.getWorld().getName();
 		final int x = to.getBlockX();
