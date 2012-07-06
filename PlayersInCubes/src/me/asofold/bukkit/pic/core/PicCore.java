@@ -21,7 +21,7 @@ public final class PicCore{
 	
 	
 	
-	static final Stats stats = new Stats("[Pic]");
+	static final Stats stats = new Stats("[PIC]");
 	
 	static final Integer idPPCubes = stats.getNewId("pp_cubes");
 	static final Integer idPPSeen = stats.getNewId("pp_seen");
