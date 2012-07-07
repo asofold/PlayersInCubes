@@ -31,6 +31,7 @@ public class PicPlayer {
 
 	/**
 	 * Remove all cube associations.
+	 * @return All players that could see the player or were seen by the player.
 	 */
 	public final Set<String> checkOut() {
 		final Set<String> out = new HashSet<String>();
