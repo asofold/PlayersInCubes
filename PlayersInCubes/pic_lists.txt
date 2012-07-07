@@ -79,7 +79,7 @@ Implications:
 * The maximal distance at which players might see each other,
     seems to be the sum of cube.size and cube.distance, the minimal distance
      at which players can not see each others will be the maximum of both.
-    Still dist.lazy has to be counted in.
+    Still lazy.distance has to be counted in.
 
 STRUCTURES
 ------------------
