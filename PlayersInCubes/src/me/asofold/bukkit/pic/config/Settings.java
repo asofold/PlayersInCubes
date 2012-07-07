@@ -1,6 +1,9 @@
 package me.asofold.bukkit.pic.config;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 import me.asofold.bukkit.pic.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.pic.config.compatlayer.CompatConfigFactory;
@@ -19,6 +22,7 @@ public class Settings {
 	static final String pathDistCube = "cube.distance";
 	static final String pathDistLazy = "lazy.distance";
 	static final String pathDurExpireData = "lazy.lifetime";
+	static final String pathIgnoreWorlds = "ignore-worlds";
 	
 	/**
 	 * If to do checks at all.
@@ -45,6 +49,11 @@ public class Settings {
 	 */
 	public long durExpireData = 0;
 	
+	/**
+	 * Worlds to ignore, exact case.
+	 */
+	public final Set<String> ignoreWorlds = new HashSet<String>();
+	
 	public boolean save(File file){
 		CompatConfig cfg  = CompatConfigFactory.getConfig(file);
 		toConfig(cfg);
@@ -64,6 +73,7 @@ public class Settings {
 		cfg.set(pathDistCube, distCube);
 		cfg.set(pathDistLazy, distLazy);
 		cfg.set(pathDurExpireData, durExpireData / 1000); // Saved in seconds
+		cfg.set(pathIgnoreWorlds, new LinkedList<String>(ignoreWorlds));
 	}
 
 	/**
@@ -83,6 +93,7 @@ public class Settings {
 		settings.distCube = cfg.getInt(pathDistCube, ref.distCube);
 		settings.distLazy = cfg.getInt(pathDistLazy, ref.distLazy);
 		settings.durExpireData = cfg.getLong(pathDurExpireData, ref.durExpireData / 1000) * 1000; // Saved in seconds
+        ConfigUtil.readStringSetFromList(cfg, pathIgnoreWorlds, settings.ignoreWorlds, true, true, false);
 		return settings;
 	}
 	

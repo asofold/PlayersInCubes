@@ -15,7 +15,9 @@ public final class CubeServer {
 	
 	private final Map<CubePos, CubeData> cubes = new HashMap<CubePos, CubeData>(500);
 	
-	public PicCore core;
+	public final Set<String> players = new HashSet<String>();
+	
+	public final PicCore core;
 
 	public final int cubeSize;
 
@@ -104,6 +106,7 @@ public final class CubeServer {
 
 	public final void clear() {
 		cubes.clear();
+		players.clear();
 	}
 	
 }

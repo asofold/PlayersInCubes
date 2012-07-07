@@ -54,7 +54,12 @@ Manage with /playersincubes ... (aliases: pic, pcubes)
 
 Configuration
 ----------------------------------------
-
+* enabled
+    If checks are enabled at all. 
+    Can be altered by commands (see commands section).
+* ignore-worlds
+    This is a list of worlds not to be included in checks,
+     the world names must be accurate in letter case.
 * cube.size
     The size of a cube.
 * cube.distance
@@ -67,9 +72,6 @@ Configuration
     Duration in seconds after wich a re-check of a player is forced,
      if the player moves, in any case. Set to 0 to not use this.
     This is probably unnecessary to set, ever.
-* enabled
-    If checks are enabled at all. 
-    Can be altered by commands (see commands section).
     
 The configuration can be reloaded at runtime (see commands section).
 
@@ -100,26 +102,29 @@ POSSIBLE OPTIMIZATIONS
 - Cube lookup: Prevent object creation and some iterators and set creation, 
     lookup by hash directly (refactor to arrays + modulo?)
 - Store some objects longer / permanently, to avoid creating them newly.
-
+- Use sets of players in a world to make faster estimation whom to render visible on simple rechecks.
 
 POSSIBLE FEATURES
 ------------------------------
 - Permanently loaded cubes with special properties 
     + API (turn on lights in town or the like ...).
-
+- World specific settings (replacing ignore worlds, but also for other settings)
 
 STACK
 -----------------------------------
-
+? refactor a bit for CubeServer.players 
 ? Stats for some timings (bukkit has such though)
 ? add a way for compatibility with vanishing plugins.
 ? add invisibility ? (but do respect who can be seen)
 ? add a way to see all others always.
 
 
-
 VERSION HISTORY
 ----------------------------------
+
+(1.1.0)
+- (add) Option to ignore worlds.
+
 (1.0.0) *** Initial version.
 
 

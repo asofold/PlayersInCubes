@@ -67,6 +67,7 @@ public final class PicCore{
 			}
 		}
 		else{
+			if (pp.world != null) getCubeServer(pp.world).players.remove(player);
 			renderBlind(pp, pp.checkOut());
 			players.remove(pp.playerName); // TODO: maybe hold data longer.
 		}
@@ -137,12 +138,22 @@ public final class PicCore{
 	public final void check(final Player player, final Location to) {
 		if (!enabled) return;
 		final PicPlayer pp =  getPicPlayer(player);
-		
 		final String world = to.getWorld().getName();
+		if (settings.ignoreWorlds.contains(world)){
+			// Detect world change (!):
+			if (pp.world == null || !pp.world.equals(world)){
+				final CubeServer server = getCubeServer(world);
+				if (!server.players.isEmpty()) renderSeen(pp, server.players);
+				server.players.add(pp.playerName);
+				pp.world = world;
+				pp.tsLoc = 0; // necessary.
+			}
+			// else: simply ignore.
+			return;
+		}
 		final int x = to.getBlockX();
 		final int y = to.getBlockY();
 		final int z = to.getBlockZ();
-		
 		final long ts = System.currentTimeMillis();
 		
 		// Check if to set the postion:
@@ -154,6 +165,19 @@ public final class PicCore{
 		}
 		else if (!world.equals(pp.world)){
 			// World change, invalidate player.
+			if (pp.world == null){
+				getCubeServer(world).players.add(pp.playerName);
+			}
+			else{
+				// Check if it was an ignored world:
+				if (settings.ignoreWorlds.contains(pp.world)){
+					final CubeServer oldServer = cubeServers.get(pp.world);
+					if (oldServer != null && !oldServer.players.isEmpty()){ // null is unlikely.
+						oldServer.players.remove(pp.playerName);
+						renderBlind(pp, oldServer.players);
+					}
+				}
+			}
 			pp.checkOut();
 		}
 		else if (pp.inRange(x, y, z, settings.distLazy)){
