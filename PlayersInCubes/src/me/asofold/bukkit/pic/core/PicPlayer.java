@@ -62,6 +62,7 @@ public class PicPlayer {
 			}
 		}
 		cubes.removeAll(rem);
+		PicCore.stats.addStats(PicCore.idPPRemCubes, rem.size());
 		return out;
 	}
 	

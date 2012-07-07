@@ -118,9 +118,20 @@ STACK
 ? add invisibility ? (but do respect who can be seen)
 ? add a way to see all others always.
 
+***
+! add version to info.
+? check: world transitions, from ignored to ignored, from covered to ignored (!)
+!(adjust) Check for ignored worlds on checkouts (compatibility).
+
+!explain names of stats entries, and maybe how to interpret
+!explain how to adjust the settings without wrecking it.
 
 VERSION HISTORY
 ----------------------------------
+
+(1.1.1)
+- (add) Stats: Removed cubes for players.
+- (adjust) Names of stats entries.
 
 (1.1.0)
 - (add) Option to ignore worlds.

@@ -23,9 +23,10 @@ public final class PicCore{
 	
 	static final Stats stats = new Stats("[PIC]");
 	
-	static final Integer idPPCubes = stats.getNewId("pp_cubes");
-	static final Integer idPPSeen = stats.getNewId("pp_seen");
-	static final Integer idPPRemove = stats.getNewId("pp_remove");
+	static final Integer idPPCubes = stats.getNewId("pp_ncubes");
+	static final Integer idPPRemCubes= stats.getNewId("pp_remcubes");
+	static final Integer idPPSeen = stats.getNewId("pp_insight");
+	static final Integer idPPRemove = stats.getNewId("pp_offsight");
 	
 	static{
 		stats.setLogStats(false);
