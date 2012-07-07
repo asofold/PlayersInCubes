@@ -119,12 +119,15 @@ STACK
 ? add a way to see all others always.
 
 ***
-! add version to info.
-? check: world transitions, from ignored to ignored, from covered to ignored (!)
-!(adjust) Check for ignored worlds on checkouts (compatibility).
 
 !explain names of stats entries, and maybe how to interpret
 !explain how to adjust the settings without wrecking it.
+! add version to info.
+
+? check: Make ignored worlds "untouched", i.e. only adjust things for players that move from / to / in checked worlds.
+!(adjust) Check for ignored worlds on checkouts (compatibility).
+
+? Check surprisingly many cubes get removed from players on checking.
 
 VERSION HISTORY
 ----------------------------------
