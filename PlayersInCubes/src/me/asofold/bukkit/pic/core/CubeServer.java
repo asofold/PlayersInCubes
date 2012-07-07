@@ -26,7 +26,9 @@ public final class CubeServer {
 
 	public CubeServer(final String world, final PicCore core, int cubeSize){
 		this.world  = world;
-		idCubes = PicCore.stats.getNewId("ncubes_" + world);
+		final String nCubesKey = "ncubes_" + world;
+		final Integer id = PicCore.stats.getId(nCubesKey);
+		idCubes = (id == null)?PicCore.stats.getNewId(nCubesKey):id;
 		this.core = core;
 		this.cubeSize = cubeSize;
 	}
