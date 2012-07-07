@@ -1,7 +1,5 @@
 package me.asofold.bukkit.pic;
 
-import java.io.File;
-
 import me.asofold.bukkit.pic.core.PicCore;
 import me.asofold.bukkit.pic.listeners.PicListener;
 import me.asofold.bukkit.pic.util.Utils;
@@ -15,16 +13,21 @@ public final class PlayersInCubes extends JavaPlugin {
 	
 	private final PicCore core = new PicCore();
 	private final PicListener listener = new PicListener(core);
+	
+	public PlayersInCubes(){
+		core.setDataFolder(getDataFolder());
+	}
 
 	@Override
 	public final void onDisable() {
-		core.clear();
-		System.out.println("[PIC] " + getDescription().getFullName() +" is has been disabled.");
+		core.clear(false); // Render seen, if just this is disabled.
+		System.out.println("[PIC] " + getDescription().getFullName() +" has been disabled.");
 	}
 
 	@Override
 	public final void onEnable() {
-		core.reload(new File(getDataFolder(), "config.yml"));
+		core.setDataFolder(getDataFolder());
+		core.reload();
 		getServer().getPluginManager().registerEvents(listener, this);
 		System.out.println("[PIC] " + getDescription().getFullName() +" is now enabled.");
 	}
@@ -40,7 +43,7 @@ public final class PlayersInCubes extends JavaPlugin {
 		if (len > 0) cmd = args[0].trim().toLowerCase();
 		if (len == 1 && cmd.equals("reload")){
 			if (!Utils.checkPerm(sender, "playersincubes.reload")) return true;
-			if (core.reload(new File(getDataFolder(), "config.yml"))) sender.sendMessage("[PIC] Settings reloaded.");
+			if (core.reload()) sender.sendMessage("[PIC] Settings reloaded.");
 			else sender.sendMessage("[PIC] Reloading the settings failed.");
 			return true;
 		}
@@ -64,6 +67,19 @@ public final class PlayersInCubes extends JavaPlugin {
 		else if (len == 1 && cmd.equals("info")){
 			if (!Utils.checkPerm(sender, "playersincubes.info")) return true;
 			sender.sendMessage(core.getInfoMessage());
+			return true;
+		}
+		else if (len == 1 && cmd.equals("disable")){
+			if (!Utils.checkPerm(sender, "playersincubes.disable")) return true;
+			if (core.setEnabled(false))	sender.sendMessage("[PIC] Rendered all visible and disabled checking.");
+			else sender.sendMessage("[PIC] PlayersInCubes was already disabled.");
+			return true;
+		}
+		else if (len == 1 && cmd.equals("enable")){
+			if (!Utils.checkPerm(sender, "playersincubes.enable")) return true;
+			core.setEnabled(true);
+			if (core.setEnabled(false))	sender.sendMessage("[PIC] PlayersInCubes is now enabled.");
+			else sender.sendMessage("[PIC] PlayersInCubes was already enabled.");
 			return true;
 		}
 		return false;

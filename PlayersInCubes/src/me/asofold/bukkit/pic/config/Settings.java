@@ -14,10 +14,16 @@ import me.asofold.bukkit.pic.config.compatlayer.ConfigUtil;
  */
 public class Settings {
 	
+	static final String pathEnabled = "enabled";
 	static final String pathCubeSize = "cube.size";
 	static final String pathDistCube = "cube.distance";
 	static final String pathDistLazy = "lazy.dist";
 	static final String pathDurExpireData = "lazy.lifetime";
+	
+	/**
+	 * If to do checks at all.
+	 */
+	public boolean enabled = true;
 	
 	/**
 	 * Size of a cube.
@@ -53,6 +59,7 @@ public class Settings {
 	}
 
 	private void toConfig(CompatConfig cfg) {
+		cfg.set(pathEnabled, true);
 		cfg.set(pathCubeSize, cubeSize);
 		cfg.set(pathDistCube, distCube);
 		cfg.set(pathDistLazy, distLazy);
@@ -71,6 +78,7 @@ public class Settings {
 		if (ConfigUtil.forceDefaults(defaults, cfg)) cfg.save();
 		Settings settings = new Settings();
 		Settings ref = new Settings();
+		settings.enabled = cfg.getBoolean(pathEnabled, ref.enabled);
 		settings.cubeSize = cfg.getInt(pathCubeSize, ref.cubeSize);
 		settings.distCube = cfg.getInt(pathDistCube, ref.distCube);
 		settings.distLazy = cfg.getInt(pathDistLazy, ref.distLazy);

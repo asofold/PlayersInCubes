@@ -46,12 +46,17 @@ public final class PicCore{
 	 * Player specific data / lookup.
 	 */
 	private final Map<String, PicPlayer> players = new HashMap<String, PicPlayer>(517);
+	
+	private File dataFolder = null;
+	
+	private boolean enabled = true;
 
 	/**
 	 * Quit, kick.
 	 * @param player
 	 */
 	public final void checkOut(final Player player) {
+		if (!enabled) return;
 		final String playerName = player.getName();
 		final PicPlayer pp = players.get(playerName);
 		if (pp == null){ // contract ?
@@ -68,10 +73,12 @@ public final class PicCore{
 		
 	}
 
-	public boolean reload(File file) {
-		Settings settings = Settings.load(file);
+	public final boolean reload() {
+		final File file = new File(dataFolder, "config.yml");
+		final Settings settings = Settings.load(file);
 		if (settings != null){
 			applySettings(settings);
+			// Consider logging that settings were reloaded.
 			return true;
 		}
 		else return false;
@@ -128,6 +135,7 @@ public final class PicCore{
 	 * @param to NOT NULL
 	 */
 	public final void check(final Player player, final Location to) {
+		if (!enabled) return;
 		final PicPlayer pp =  getPicPlayer(player);
 		
 		final String world = to.getWorld().getName();
@@ -189,40 +197,61 @@ public final class PicCore{
 		// Later: maybe try for a lazy transition or a hard one depending on changes.
 		this.settings = settings;
 		cleanup();
+		enabled = settings.enabled;
 	}
 
 	/**
 	 * Remove all players, remove all data, check in all players again.
 	 */
 	public final void cleanup() {
-		clear();
+		clear(true);
 		checkAllOnlinePlayers();
 	}
 	
 	public final void checkAllOnlinePlayers() {
+		if (!enabled) return;
 		for (final Player player : Bukkit.getOnlinePlayers()){
 			check(player, player.getLocation());
 		}
 	}
 
-	public final void clear(){
-		removeAllPlayers();
+	public final void clear(final boolean blind){
+		removeAllPlayers(blind);
 		for (final CubeServer server : cubeServers.values()){
 			server.clear();
 		}
 		cubeServers.clear();
 	}
 
-	private final void removeAllPlayers() {
-		for (final PicPlayer pp : players.values()){
-			renderBlind(pp, pp.checkOut());
+	/**
+	 * 
+	 * @param blind Render players blind or let all see all again (very expensive).
+	 */
+	private final void removeAllPlayers(final boolean blind) {
+		if (blind){
+			// "Efficient" way: only render those blind, that are seen.
+			for (final PicPlayer pp : players.values()){
+				renderBlind(pp, pp.checkOut());
+			}
+		}
+		else{
+			// Costly: basically quadratic time all vs. all.
+			final Player[] online = Bukkit.getOnlinePlayers();
+			for (final PicPlayer pp : players.values()){
+				pp.checkOut(); // Ignore return value.
+				for (final Player other : online){
+					if (!other.canSee(pp.bPlayer)) other.showPlayer(pp.bPlayer);
+					if (!pp.bPlayer.canSee(other)) pp.bPlayer.showPlayer(other);
+				}
+			}
 		}
 		players.clear();
 	}
 
 	public final String getInfoMessage() {
 		final StringBuilder b = new StringBuilder();
-		b.append("[PIC][INFO]");
+		b.append("[PIC][INFO] PlayersInCubes is ");
+		b.append((enabled ? "enabled.":"DISABLED."));
 		b.append(" cube-size=" + settings.cubeSize);
 		b.append(" cube-dist=" + settings.distCube);
 		b.append(" lazy-dist=" + settings.distLazy);
@@ -230,6 +259,30 @@ public final class PicCore{
 //		b.append(" | ");
 		b.append(" | (More: /pic stats)");
 		return b.toString();
+	}
+
+	/**
+	 * This will alter and save the settings, unless no change is done.
+	 * @param enabled
+	 * @return If this was a state change.
+	 */
+	public final boolean setEnabled(final boolean enabled) {
+		if (enabled == this.enabled) return false;
+		if (enabled){
+			this.enabled = true;
+			checkAllOnlinePlayers();
+		}
+		else{
+			this.enabled = false;
+			clear(false); // Renders all visible.
+		}
+		settings.enabled = this.enabled;
+		
+		return true;
+	}
+
+	public final void setDataFolder(final File dataFolder) {
+		this.dataFolder = dataFolder;
 	}
 
 }

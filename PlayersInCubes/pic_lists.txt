@@ -3,6 +3,19 @@ PlayersInCubes - Lists
 
 "Simple" attempt to have players see each other or not based on their distance.
 
+PERMISSIONS
+------------------
+
+playersincubes. ...
+
+* reload
+* info
+* cleanup
+* disable
+* enable
+* stats.view
+* stats.reset
+
 LICENSE
 ------------------
 "Minimal" for a Bukkit plugin.
@@ -10,10 +23,10 @@ LICENSE
 
 STRUCTURES
 ------------------
-- World split in chunks of equal size.
+- World split in cubes of equal size.
 - HashMap with one hash (3 dim).
 - Sectors keep Sets for players that are inside and players that can see the sector.
-- A position is kept for every player, that will be reset upon moving far enough (or probably timeout).
+- Efficiency: A position is kept for every player, that will be reset upon moving far enough (or probably timeout).
 - A player gets registered in cubes that are within a certain distance.
 
 use identities ?
@@ -36,26 +49,18 @@ POSSIBLE FEATURES
 STACK
 -----------------------------------
 
+Stats for some timings ? 
 
 ***
-add a way to see all others always.
+
+? add a way for compatibility with vanishing plugins.
+? add a way to see all others always. [+ add invisibility ?]
 
 *** RELEASE
-***
-intended command features:     usage: '/playersincubes ...: reload | info | disable | enable | cleanup  | stats reset | cleanup | Aliases: pic, pcubes'
 
 
-Stats for some timings ?
+*** Refactor : the canSee logic: canView != isInside ! (currently: players that can see a cube see each other.)
 
-*** MINIMUM RELEASE
-
-Stats for add, remove
-Stats for number of cubes (PicPlayer, CubeServer)
-
-Add disabling and enabling (persistent)!
- 
-- Settings.load + save
-- applySettings + checkOutAll + checkAll
 
 VERSION HISTORY
 ----------------------------------
