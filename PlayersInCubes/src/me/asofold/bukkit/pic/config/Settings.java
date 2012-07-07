@@ -43,7 +43,7 @@ public class Settings {
 	/**
 	 * Duration after which a player gets checked again.
 	 */
-	public long durExpireData = 10000;
+	public long durExpireData = 0;
 	
 	public boolean save(File file){
 		CompatConfig cfg  = CompatConfigFactory.getConfig(file);
