@@ -107,7 +107,7 @@ POSSIBLE OPTIMIZATIONS
 POSSIBLE FEATURES
 ------------------------------
 - Permanently loaded cubes with special properties 
-    + API (turn on lights in town or the like ...).
+    + API (turn on lights in town, exclude area from checks, include for checks or the like ...).
 - World specific settings (replacing ignore worlds, but also for other settings)
 
 STACK
