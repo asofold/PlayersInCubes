@@ -134,6 +134,7 @@ VERSION HISTORY
 
 (1.1.1)
 - (bugfix) Stats keys for worlds in CubeServer.
+- (update) Stats: final rage
 - (add) Stats: Removed cubes for players.
 - (adjust) Names of stats entries.
 
