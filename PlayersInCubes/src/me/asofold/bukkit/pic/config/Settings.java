@@ -1,9 +1,12 @@
 package me.asofold.bukkit.pic.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+
+import org.bukkit.Bukkit;
 
 import me.asofold.bukkit.pic.config.compatlayer.CompatConfig;
 import me.asofold.bukkit.pic.config.compatlayer.CompatConfigFactory;
@@ -55,6 +58,7 @@ public class Settings {
 	public final Set<String> ignoreWorlds = new HashSet<String>();
 	
 	public boolean save(File file){
+		checkFile(file);
 		CompatConfig cfg  = CompatConfigFactory.getConfig(file);
 		toConfig(cfg);
 		return cfg.save();
@@ -68,7 +72,7 @@ public class Settings {
 	}
 
 	private void toConfig(CompatConfig cfg) {
-		cfg.set(pathEnabled, true);
+		cfg.set(pathEnabled, enabled);
 		cfg.set(pathCubeSize, cubeSize);
 		cfg.set(pathDistCube, distCube);
 		cfg.set(pathDistLazy, distLazy);
@@ -85,7 +89,10 @@ public class Settings {
 		CompatConfig cfg = CompatConfigFactory.getConfig(file);
 		cfg.load();
 		CompatConfig defaults = getDefaultConfig();
-		if (ConfigUtil.forceDefaults(defaults, cfg)) cfg.save();
+		if (ConfigUtil.forceDefaults(defaults, cfg)){
+			checkFile(file);
+			cfg.save();
+		}
 		Settings settings = new Settings();
 		Settings ref = new Settings();
 		settings.enabled = cfg.getBoolean(pathEnabled, ref.enabled);
@@ -95,6 +102,18 @@ public class Settings {
 		settings.durExpireData = cfg.getLong(pathDurExpireData, ref.durExpireData / 1000) * 1000; // Saved in seconds
         ConfigUtil.readStringSetFromList(cfg, pathIgnoreWorlds, settings.ignoreWorlds, true, true, false);
 		return settings;
+	}
+
+	private static void checkFile(File file) {
+		if (!file.exists()){
+			file.getParentFile().mkdirs();
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				Bukkit.getLogger().severe("[PIC] Could not create empty file: " + file.getAbsolutePath());
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }
