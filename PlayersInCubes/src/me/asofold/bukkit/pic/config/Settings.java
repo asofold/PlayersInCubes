@@ -17,7 +17,7 @@ public class Settings {
 	static final String pathEnabled = "enabled";
 	static final String pathCubeSize = "cube.size";
 	static final String pathDistCube = "cube.distance";
-	static final String pathDistLazy = "lazy.dist";
+	static final String pathDistLazy = "lazy.distance";
 	static final String pathDurExpireData = "lazy.lifetime";
 	
 	/**
