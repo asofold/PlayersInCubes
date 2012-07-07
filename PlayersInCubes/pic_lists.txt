@@ -1,66 +1,127 @@
 PlayersInCubes - Lists
 -----------------------------------------
 
-"Simple" attempt to have players see each other or not based on their distance.
-
-PERMISSIONS
-------------------
-
-playersincubes. ...
-
-* reload
-* info
-* cleanup
-* disable
-* enable
-* stats.view
-* stats.reset
 
 LICENSE
 ------------------
 "Minimal" for a Bukkit plugin.
+(Probably to be updated!)
 
+
+DESCRIPTION
+-----------------------------------------
+
+PlayersInCubes is a "simple" attempt to have players see each other or not, 
+ based on their distance.
+The distance of players to each other is estimated by associating players with
+ all cube-partitions within a certain range of the player, and let players 
+ see each other whenever both are associated with one or more identical cubes.
+Even though there is a good bit of inaccuracy and variation for the distance, 
+ players always both see each other or both can not see each other.
+ 
+ IMPORTANT: 
+ * This will most likely be incompatible with any sort of 
+    vanish or disguise plugins.
+ * All players are treated alike, exceptions are planned.
+
+COMMANDS AND PERMISSIONS
+-------------------------
+
+Manage with /playersincubes ... (aliases: pic, pcubes)
+
+* Reload the configuration:
+    ... reload
+    playersincubes.reload
+* Show info about the configuration:
+    ... info
+    playersincubes.info
+* Re check all players:
+    ... cleanup
+    playersincubes.cleanup
+* Disable checking (will write back to config.yml):
+    ... disable
+    playersincubes.disable
+* Enable (will write back to config.yml):
+    ... enable
+    playersincubes.enable
+* View stats about cubes in use:
+    ... stats
+    playersincubes.stats.view
+* Reset stats:
+    ... stats reset
+    playersincubes.stats.reset
+
+
+Configuration
+----------------------------------------
+
+* cube.size
+    The size of a cube.
+* cube.distance
+    A cube center must be within this distance from a player,
+    to get associated.
+* lazy.distance
+    A player must move at least this far to force re-checking,
+     this improves the performance clearly, at the cost of accuracy.
+* lazy.lifetime
+    Duration in seconds after wich a re-check of a player is forced,
+     if the player moves, in any case. Set to 0 to not use this.
+    This is probably unnecessary to set, ever.
+* enabled
+    If checks are enabled at all. 
+    Can be altered by commands (see commands section).
+    
+The configuration can be reloaded at runtime (see commands section).
+
+Implications: 
+* The maximal distance at which players might see each other,
+    seems to be the sum of cube.size and cube.distance, the minimal distance
+     at which players can not see each others will be the maximum of both.
+    Still dist.lazy has to be counted in.
 
 STRUCTURES
 ------------------
 - World split in cubes of equal size.
 - HashMap with one hash (3 dim).
-- Sectors keep Sets for players that are inside and players that can see the sector.
-- Efficiency: A position is kept for every player, that will be reset upon moving far enough (or probably timeout).
-- A player gets registered in cubes that are within a certain distance.
-
-use identities ?
-
+- Cubes are associated with the player according to the distance of 
+    their center to the player.
+- Cubes keep Sets for players that can see the sector. 
+    Any overlap for two players means they can see each other.
+- Optimization (lazy): A position is kept for every player, 
+    that will be reset upon moving far enough (or after timeout).
+    If no reset of the position is necessary, 
+    no changes will be done to associated cubes.
 
 
 POSSIBLE OPTIMIZATIONS
 -------------------------------
-- More optimization is possible with remembering the cube a player is in, though that might contradict distCube
-- renderBlind: render Blind with all players at once.
-- Cube lookup: Prevent object creation, lookup by hash directly (refactor to arrays + modulo?)
-- Storing cubes: use array + modulo to get past all the keys, entry sets iterations over objects. (CubeServer) 
+- More optimization is possible with remembering the cube a player is in, 
+    though that might contradict distCube
+- Cube lookup: Prevent object creation and some iterators and set creation, 
+    lookup by hash directly (refactor to arrays + modulo?)
 - Store some objects longer / permanently, to avoid creating them newly.
+
 
 POSSIBLE FEATURES
 ------------------------------
-- Permanently loaded cubes with special properties + API (turn lights in town on ...).
+- Permanently loaded cubes with special properties 
+    + API (turn on lights in town or the like ...).
 
 
 STACK
 -----------------------------------
 
-Stats for some timings ? 
-
-***
-
+? Stats for some timings (bukkit has such though)
 ? add a way for compatibility with vanishing plugins.
-? add a way to see all others always. [+ add invisibility ?]
+? add invisibility ? (but do respect who can be seen)
+? add a way to see all others always.
 
-*** RELEASE
-
-
-*** Refactor : the canSee logic: canView != isInside ! (currently: players that can see a cube see each other.)
 
 
 VERSION HISTORY
 ----------------------------------
+(1.0.0) *** Initial version.
+
+
+
+
