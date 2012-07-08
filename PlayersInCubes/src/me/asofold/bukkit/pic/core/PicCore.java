@@ -34,7 +34,7 @@ public final class PicCore{
 	private Settings settings = new Settings();
 	
 	/**
-	 * World specific CubeServer.
+	 * World specific CubeServer. Every world must have one to keep track of players inside of worlds.
 	 */
 	private final Map<String, CubeServer> cubeServers = new HashMap<String, CubeServer>(53);
 	 
@@ -246,15 +246,30 @@ public final class PicCore{
 		final PicPlayer pp =  getPicPlayer(player);
 		final String world = to.getWorld().getName();
 		if (settings.ignoreWorlds.contains(world)){
-			// Detect world change (!):
-			if (pp.world == null || !pp.world.equals(world)){
-				final CubeServer server = getCubeServer(world);
-				if (!server.players.isEmpty()) renderSeen(pp, server.players);
-				server.players.add(pp.playerName);
-				pp.world = world;
-				pp.tsLoc = 0; // necessary.
+			// Moving in a ignored world.
+			if (pp.world == null){
+				// New data.
 			}
-			// else: simply ignore.
+			else if (world.equals(pp.world)){
+				// Already inside, no changes.
+				return;
+			}
+			else{
+				// World change.
+				getCubeServer(pp.world).players.remove(player);
+				if (!settings.ignoreWorlds.contains(pp.world)){
+					// Old world was checked.
+					pp.checkOut();
+				}
+			}
+			// World change or new.
+			final CubeServer server = getCubeServer(world);
+			if (!server.players.isEmpty()) renderSeen(pp, server.players);
+			renderSeen(pp, server.players); // TODO: Correct here ?
+			server.players.add(pp.playerName);
+			pp.world = world;
+			pp.tsLoc = 0; // necessary.
+			// else: keep ignoring.
 			return;
 		}
 		final int x = to.getBlockX();
@@ -263,36 +278,31 @@ public final class PicCore{
 		final long ts = System.currentTimeMillis();
 		
 		// Check if to set the position:
-		if (pp.cubes.isEmpty()){
-			// Set new.
-		}
-		else if (settings.durExpireData > 0  && ts - pp.tsLoc > settings.durExpireData){
-			// Expired, set new.
-		}
-		else if (!world.equals(pp.world)){
-			// World change, invalidate player.
+		if (!world.equals(pp.world)){
+			// World change into a checked world.
+			// Add to new CubeServer:
+			final CubeServer server = getCubeServer(world);
+			renderBlind(pp, server.players);
+			server.players.add(pp.playerName);
+			// Check removal:
 			if (pp.world == null){
-				getCubeServer(world).players.add(pp.playerName);
+				// Was a new player.
 			}
 			else{
-				// Check if it was an ignored world:
-				if (settings.ignoreWorlds.contains(pp.world)){
-					final CubeServer oldServer = cubeServers.get(pp.world);
-					if (oldServer != null && !oldServer.players.isEmpty()){ 
-						// Later check if what kind of world transition this is (ignored/checked).
-						oldServer.players.remove(pp.playerName);
-						renderBlind(pp, oldServer.players);
-					}
-				}
+				// Remove from old server (light).
+				getCubeServer(pp.world).players.remove(pp.playerName);
+				pp.checkOut();
 			}
-			pp.checkOut();
+		}
+		else if (settings.durExpireData > 0  && ts - pp.tsLoc > settings.durExpireData){
+			// Expired, set new (no world change).
 		}
 		else if (pp.inRange(x, y, z, settings.distLazy)){
-			// Still in range, quick return !
+			// Still in range, quick return (no world change).
 			return;
 		}
 		else{
-			// Out of range set new !
+			// Out of range set new (no world change).
 		}
 		
 		// Set position.
