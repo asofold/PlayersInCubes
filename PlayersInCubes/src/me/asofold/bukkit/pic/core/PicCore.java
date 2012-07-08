@@ -292,8 +292,8 @@ public final class PicCore{
 	 * @return If this was a state change.
 	 */
 	public final boolean setEnabled(final boolean enabled) {
+		File file = new File(dataFolder, "config.yml");
 		if (!(enabled ^ this.enabled)){
-			File file = new File(dataFolder, "config.yml");
 			if (!file.exists()) settings.save(file);
 			return false;
 		}
@@ -301,7 +301,7 @@ public final class PicCore{
 		if (enabled) checkAllOnlinePlayers();
 		else clear(false); // Renders all visible.
 		settings.enabled = this.enabled;
-		settings.save(dataFolder);
+		settings.save(file);
 		return true;
 	}
 
