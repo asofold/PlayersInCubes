@@ -24,6 +24,7 @@ Even though there is a good bit of inaccuracy and variation for the distance,
     vanish or disguise plugins.
  * All players are treated alike, exceptions are planned.
 
+
 COMMANDS AND PERMISSIONS
 -------------------------
 
@@ -81,6 +82,7 @@ Implications:
      at which players can not see each others will be the maximum of both.
     Still lazy.distance has to be counted in.
 
+
 STRUCTURES
 ------------------
 - World split in cubes of equal size.
@@ -104,34 +106,49 @@ POSSIBLE OPTIMIZATIONS
 - Store some objects longer / permanently, to avoid creating them newly.
 - Use sets of players in a world to make faster estimation whom to render visible on simple rechecks.
 
+
 POSSIBLE FEATURES
 ------------------------------
 - Permanently loaded cubes with special properties 
     + API (turn on lights in town, exclude area from checks, include for checks or the like ...).
 - World specific settings (replacing ignore worlds, but also for other settings)
 
+
 STACK
 -----------------------------------
-? refactor a bit for CubeServer.players 
-? Stats for some timings (bukkit has such though)
-? add a way for compatibility with vanishing plugins.
-? add invisibility ? (but do respect who can be seen)
-? add a way to see all others always.
 
-***
+*** STATS
+? Stats for some timings (Bukkit has such though)
+? log y-level (interesting for choice of config parameters).
 
+*** STRUCTURE AND EFFICIENCY
+? use only PicPlayer.playerName internally to switch to == somewhere (Do HashSet or String.equals check that first ?)
+? refactor a bit for CubeServer.players ? more stuff from core to CubeServer ?
+
+*** VISIBILITY
+* access points: renderSeen renderBlind checkOut removeAllPlayers => PicPlayer invisible and see-all flags realistic.
+!must: multi world support to not intermingle with other visibility changing plugins for certain worlds or players in any worlds.
+? consider generic ways of who can see whom based on tags or so. -> unlikely 
+? PicPlayer: add invisibility ? (but do respect who can be seen)
+? PicPlayer: add a way to see all others always (unless really vanished).
+
+*** IGNORE WORLDS
+? check: Make ignored worlds "untouched", i.e. only adjust things for players that move from / to / in checked worlds.
+!(adjust) Check for ignored worlds on checkouts (compatibility).
+
+*** API
 ? Add minimum API: canPlayerSee(world, x, y, z) canPlayerSeePlayer(p1, p2), isWorldIgnore and the like.
 
+
+*** DOC
 !explain names of stats entries, and maybe how to interpret
 !explain how to adjust the settings without wrecking it.
 ! add version to info.
 
-? check: Make ignored worlds "untouched", i.e. only adjust things for players that move from / to / in checked worlds.
-!(adjust) Check for ignored worlds on checkouts (compatibility).
 
-? Check surprisingly many cubes get removed from players on checking.
+*** ISSUES
+? Check: surprisingly many cubes get removed from players on checking.
 
-MEssages are inconsistent on enable / disable
 
 
 VERSION HISTORY

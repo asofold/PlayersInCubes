@@ -28,11 +28,6 @@ public final class PicCore{
 	static final Integer idPPSeen = stats.getNewId("pp_insight");
 	static final Integer idPPRemove = stats.getNewId("pp_offsight");
 	
-	static{
-		stats.setLogStats(false);
-		stats.setShowRange(true);
-	}
-	
 	/**
 	 * Settings.
 	 */
@@ -51,30 +46,18 @@ public final class PicCore{
 	private File dataFolder = null;
 	
 	private boolean enabled = true;
-
-	/**
-	 * Quit, kick.
-	 * @param player
-	 */
-	public final void checkOut(final Player player) {
-		if (!enabled) return;
-		final String playerName = player.getName();
-		final PicPlayer pp = players.get(playerName);
-		if (pp == null){ // contract ?
-			for (final PicPlayer opp : players.values()){
-				if (opp.playerName.equals(playerName)) continue;
-				if (opp.bPlayer.canSee(player)) opp.bPlayer.hidePlayer(player);
-				if (player.canSee(opp.bPlayer)) player.hidePlayer(opp.bPlayer);
-			}
-		}
-		else{
-			if (pp.world != null) getCubeServer(pp.world).players.remove(player);
-			renderBlind(pp, pp.checkOut());
-			players.remove(pp.playerName); // TODO: maybe hold data longer.
-		}
-		
+	
+	public final void setDataFolder(final File dataFolder) {
+		this.dataFolder = dataFolder;
 	}
-
+	
+	private final void applySettings(final Settings settings) {
+		// Later: maybe try for a lazy transition or a hard one depending on changes.
+		this.settings = settings;
+		cleanup();
+		enabled = settings.enabled;
+	}
+	
 	public final boolean reload() {
 		final File file = new File(dataFolder, "config.yml");
 		final Settings settings = Settings.load(file);
@@ -85,15 +68,55 @@ public final class PicCore{
 		}
 		else return false;
 	}
-
+	
 	/**
-	 * Join or respawn.
-	 * @param player
-	 * @param location 
+	 * This will alter and save the settings, unless no change is done.
+	 * @param enabled
+	 * @return If this was a state change.
 	 */
-	public final void checkIn(final Player player, Location location) {
-		checkOut(player);
-		check(player, player.getLocation());
+	public final boolean setEnabled(final boolean enabled) {
+		File file = new File(dataFolder, "config.yml");
+		if (!(enabled ^ this.enabled)){
+			if (!file.exists()) settings.save(file);
+			return false;
+		}
+		this.enabled = enabled;
+		if (enabled) checkAllOnlinePlayers();
+		else clear(false); // Renders all visible.
+		settings.enabled = enabled;
+		settings.save(file);
+		return true;
+	}
+	
+	public final Stats getStats(){
+		return stats;
+	}
+	
+	public final String getInfoMessage() {
+		final StringBuilder b = new StringBuilder();
+		b.append("[PIC][INFO] PlayersInCubes is ");
+		b.append((enabled ? "enabled.":"DISABLED."));
+		b.append(" cube.size=" + settings.cubeSize);
+		b.append(" cube.distance=" + settings.distCube);
+		b.append(" lazy.distance=" + settings.distLazy);
+		b.append(" lazy.lifetime=" + (settings.durExpireData / 1000));
+//		b.append(" | ");
+		b.append(" | (More: /pic stats)");
+		return b.toString();
+	}
+	
+	/**
+	 * Get the cube server for the world, will create it if not yet existent.
+	 * @param world Exact case.
+	 * @return
+	 */
+	private final CubeServer getCubeServer(final String world) {
+		CubeServer server = cubeServers.get(world);
+		if (server == null){
+			server = new CubeServer(world, this, settings.cubeSize);
+			cubeServers.put(world, server);
+		}
+		return server;
 	}
 	
 	/**
@@ -130,6 +153,88 @@ public final class PicCore{
 			if (!opp.bPlayer.canSee(player)) opp.bPlayer.showPlayer(player);
 		}
 	}
+	
+	/**
+	 * Remove all players, remove all data, check in all players again.
+	 */
+	public final void cleanup() {
+		clear(true);
+		checkAllOnlinePlayers();
+	}
+	
+
+	public final void clear(final boolean blind){
+		removeAllPlayers(blind);
+		for (final CubeServer server : cubeServers.values()){
+			server.clear();
+		}
+		cubeServers.clear();
+	}
+	
+	/**
+	 * Quit, kick.
+	 * @param player
+	 */
+	public final void checkOut(final Player player) {
+		if (!enabled) return;
+		final String playerName = player.getName();
+		final PicPlayer pp = players.get(playerName);
+		if (pp == null){ // contract ?
+			for (final PicPlayer opp : players.values()){
+				if (opp.playerName.equals(playerName)) continue;
+				if (opp.bPlayer.canSee(player)) opp.bPlayer.hidePlayer(player);
+				if (player.canSee(opp.bPlayer)) player.hidePlayer(opp.bPlayer);
+			}
+		}
+		else{
+			if (pp.world != null) getCubeServer(pp.world).players.remove(player);
+			renderBlind(pp, pp.checkOut());
+			players.remove(pp.playerName); // TODO: maybe hold data longer.
+		}
+		
+	}
+	
+	/**
+	 * Does currently not remove players from the CubeServer players sets. 
+	 * @param blind Render players blind or let all see all again (very expensive).
+	 */
+	private final void removeAllPlayers(final boolean blind) {
+		if (blind){
+			// "Efficient" way: only render those blind, that are seen.
+			for (final PicPlayer pp : players.values()){
+				renderBlind(pp, pp.checkOut());
+			}
+		}
+		else{
+			// Costly: basically quadratic time all vs. all.
+			final Player[] online = Bukkit.getOnlinePlayers();
+			for (final PicPlayer pp : players.values()){
+				pp.checkOut(); // Ignore return value.
+				for (final Player other : online){
+					if (!other.canSee(pp.bPlayer)) other.showPlayer(pp.bPlayer);
+					if (!pp.bPlayer.canSee(other)) pp.bPlayer.showPlayer(other);
+				}
+			}
+		}
+		players.clear();
+	}
+
+	/**
+	 * Join or respawn.
+	 * @param player
+	 * @param location 
+	 */
+	public final void checkIn(final Player player, Location location) {
+		checkOut(player);
+		check(player, player.getLocation());
+	}
+	
+	public final void checkAllOnlinePlayers() {
+		if (!enabled) return;
+		for (final Player player : Bukkit.getOnlinePlayers()){
+			check(player, player.getLocation());
+		}
+	}
 
 	/**
 	 * Lighter check: Use this for set up players.
@@ -157,7 +262,7 @@ public final class PicCore{
 		final int z = to.getBlockZ();
 		final long ts = System.currentTimeMillis();
 		
-		// Check if to set the postion:
+		// Check if to set the position:
 		if (pp.cubes.isEmpty()){
 			// Set new.
 		}
@@ -173,7 +278,8 @@ public final class PicCore{
 				// Check if it was an ignored world:
 				if (settings.ignoreWorlds.contains(pp.world)){
 					final CubeServer oldServer = cubeServers.get(pp.world);
-					if (oldServer != null && !oldServer.players.isEmpty()){ // null is unlikely.
+					if (oldServer != null && !oldServer.players.isEmpty()){ 
+						// Later check if what kind of world transition this is (ignored/checked).
 						oldServer.players.remove(pp.playerName);
 						renderBlind(pp, oldServer.players);
 					}
@@ -182,7 +288,7 @@ public final class PicCore{
 			pp.checkOut();
 		}
 		else if (pp.inRange(x, y, z, settings.distLazy)){
-			// still in range, quick return !
+			// Still in range, quick return !
 			return;
 		}
 		else{
@@ -198,115 +304,6 @@ public final class PicCore{
 		
 		// Add player to all cubes !
 		getCubeServer(world).update(pp, settings.distCube);
-	}
-
-	/**
-	 * Get the cube server for the world, will create it if not yet existent.
-	 * @param world Exact case.
-	 * @return
-	 */
-	private final CubeServer getCubeServer(final String world) {
-		CubeServer server = cubeServers.get(world);
-		if (server == null){
-			server = new CubeServer(world, this, settings.cubeSize);
-			cubeServers.put(world, server);
-		}
-		return server;
-	}
-	
-	public final Stats getStats(){
-		return stats;
-	}
-	
-	private final void applySettings(final Settings settings) {
-		// Later: maybe try for a lazy transition or a hard one depending on changes.
-		this.settings = settings;
-		cleanup();
-		enabled = settings.enabled;
-	}
-
-	/**
-	 * Remove all players, remove all data, check in all players again.
-	 */
-	public final void cleanup() {
-		clear(true);
-		checkAllOnlinePlayers();
-	}
-	
-	public final void checkAllOnlinePlayers() {
-		if (!enabled) return;
-		for (final Player player : Bukkit.getOnlinePlayers()){
-			check(player, player.getLocation());
-		}
-	}
-
-	public final void clear(final boolean blind){
-		removeAllPlayers(blind);
-		for (final CubeServer server : cubeServers.values()){
-			server.clear();
-		}
-		cubeServers.clear();
-	}
-
-	/**
-	 * 
-	 * @param blind Render players blind or let all see all again (very expensive).
-	 */
-	private final void removeAllPlayers(final boolean blind) {
-		if (blind){
-			// "Efficient" way: only render those blind, that are seen.
-			for (final PicPlayer pp : players.values()){
-				renderBlind(pp, pp.checkOut());
-			}
-		}
-		else{
-			// Costly: basically quadratic time all vs. all.
-			final Player[] online = Bukkit.getOnlinePlayers();
-			for (final PicPlayer pp : players.values()){
-				pp.checkOut(); // Ignore return value.
-				for (final Player other : online){
-					if (!other.canSee(pp.bPlayer)) other.showPlayer(pp.bPlayer);
-					if (!pp.bPlayer.canSee(other)) pp.bPlayer.showPlayer(other);
-				}
-			}
-		}
-		players.clear();
-	}
-
-	public final String getInfoMessage() {
-		final StringBuilder b = new StringBuilder();
-		b.append("[PIC][INFO] PlayersInCubes is ");
-		b.append((enabled ? "enabled.":"DISABLED."));
-		b.append(" cube.size=" + settings.cubeSize);
-		b.append(" cube.distance=" + settings.distCube);
-		b.append(" lazy.distance=" + settings.distLazy);
-		b.append(" lazy.lifetime=" + (settings.durExpireData / 1000));
-//		b.append(" | ");
-		b.append(" | (More: /pic stats)");
-		return b.toString();
-	}
-
-	/**
-	 * This will alter and save the settings, unless no change is done.
-	 * @param enabled
-	 * @return If this was a state change.
-	 */
-	public final boolean setEnabled(final boolean enabled) {
-		File file = new File(dataFolder, "config.yml");
-		if (!(enabled ^ this.enabled)){
-			if (!file.exists()) settings.save(file);
-			return false;
-		}
-		this.enabled = enabled;
-		if (enabled) checkAllOnlinePlayers();
-		else clear(false); // Renders all visible.
-		settings.enabled = enabled;
-		settings.save(file);
-		return true;
-	}
-
-	public final void setDataFolder(final File dataFolder) {
-		this.dataFolder = dataFolder;
 	}
 
 }
