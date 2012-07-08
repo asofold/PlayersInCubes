@@ -152,11 +152,9 @@ STACK
 ? Check: surprisingly many cubes get removed from players on checking.
 
 ? probably not : give allPlayers to cubeServer ? => more efficient renderBLind(world!), or renderBLind(pp, server, ignored)
-change renderAllBlind etc to only check vs. the players in that world ? [consistency trouble]
+change renderAllBlind etc to only check vs. the players in that world ? [but: ?consistency trouble]
 
 *** convention: Every world has a CubeServer that tracks players.
-*** !! check: world changing etc  
-*** renderBlind etc at world entry , so more lazy treatment is possible.
 
 
 VERSION HISTORY
