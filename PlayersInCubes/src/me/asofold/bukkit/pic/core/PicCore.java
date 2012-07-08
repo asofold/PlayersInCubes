@@ -134,7 +134,7 @@ public final class PicCore{
 		final Player player = pp.bPlayer;
 		for (final String name : names){
 			final PicPlayer opp = players.get(name);
-			// if (opp == null) continue; // ERROR
+			 if (opp == null) continue; // TODO: ERROR, find out.
 			if (player.canSee(opp.bPlayer)) player.hidePlayer(opp.bPlayer);
 			if (opp.bPlayer.canSee(player)) opp.bPlayer.hidePlayer(player);
 		}
@@ -144,7 +144,7 @@ public final class PicCore{
 		final Player player = pp.bPlayer;
 		for (final String name : names){
 			final PicPlayer opp = players.get(name);
-			// if (opp == null) continue; // ERROR
+			 if (opp == null) continue; // TODO: ERROR, find out.
 			if (!player.canSee(opp.bPlayer)) player.showPlayer(opp.bPlayer);
 			if (!opp.bPlayer.canSee(player)) opp.bPlayer.showPlayer(player);
 		}

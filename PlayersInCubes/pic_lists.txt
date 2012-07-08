@@ -160,6 +160,9 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 VERSION HISTORY
 ----------------------------------
 
+(1.2.1)
+- (bugfix) npe.
+
 (1.2.0)
 - (add) Version to info message.
 - (bugfix) Potentially fixed treatment of (ignored) worlds.
