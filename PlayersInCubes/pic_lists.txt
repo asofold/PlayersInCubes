@@ -120,6 +120,8 @@ STACK
 
 ***
 
+? Add minimum API: canPlayerSee(world, x, y, z) canPlayerSeePlayer(p1, p2), isWorldIgnore and the like.
+
 !explain names of stats entries, and maybe how to interpret
 !explain how to adjust the settings without wrecking it.
 ! add version to info.
@@ -129,10 +131,15 @@ STACK
 
 ? Check surprisingly many cubes get removed from players on checking.
 
+MEssages are inconsistent on enable / disable
+
+
 VERSION HISTORY
 ----------------------------------
 
 (1.1.1)
+- (bugfix) Save settings if enable or disable is used + correct messages and behavior.
+- (adjust) Try to create folders and an empty file, if not existent.
 - (bugfix) Stats keys for worlds in CubeServer.
 - (update) Stats: final rage
 - (add) Stats: Removed cubes for players.

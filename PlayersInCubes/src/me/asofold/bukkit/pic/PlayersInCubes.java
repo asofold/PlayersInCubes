@@ -77,8 +77,7 @@ public final class PlayersInCubes extends JavaPlugin {
 		}
 		else if (len == 1 && cmd.equals("enable")){
 			if (!Utils.checkPerm(sender, "playersincubes.enable")) return true;
-			core.setEnabled(true);
-			if (core.setEnabled(false))	sender.sendMessage("[PIC] PlayersInCubes is now enabled.");
+			if (core.setEnabled(true))	sender.sendMessage("[PIC] PlayersInCubes is now enabled.");
 			else sender.sendMessage("[PIC] PlayersInCubes was already enabled.");
 			return true;
 		}
