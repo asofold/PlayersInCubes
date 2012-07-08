@@ -32,6 +32,15 @@ public final class CubeServer {
 	}
 	
 	/**
+	 * Usually called when players have checked out (problem: will be empty then, anyway).
+	 */
+	public final void clear() {
+		// Might de-associate cubes from players here?
+		cubes.clear();
+		players.clear();
+	}
+	
+	/**
 	 * Called when a CubeData has no players anymore.
 	 * @param cubeData
 	 */
@@ -47,6 +56,28 @@ public final class CubeServer {
 	
 	public final void renderSeen(final PicPlayer pp, final Set<String> names) {
 		core.renderSeen(pp, names);
+	}
+	
+	/**
+	 * Render blind or seen and add.
+	 * TODO: maybe also check rightaway ?
+	 * @param pp
+	 */
+	public final void add(final PicPlayer pp, final boolean blind){
+		if (!players.isEmpty()){
+			if (blind) core.renderBlind(pp, players);
+			else core.renderSeen(pp, players);	
+		}
+		players.add(pp.playerName);
+	}
+	
+	/**
+	 * Remove player from players set, checkout.
+	 * @param pp
+	 */
+	public final void remove(final PicPlayer pp){
+		players.remove(pp.playerName);
+		if (!pp.cubes.isEmpty()) pp.checkOut();
 	}
 
 	/**
@@ -102,11 +133,6 @@ public final class CubeServer {
 		PicCore.stats.addStats(PicCore.idPPSeen, seen.size());
 		PicCore.stats.addStats(PicCore.idPPRemove, szRem);
 		PicCore.stats.addStats(idCubes, cubes.size());
-	}
-
-	public final void clear() {
-		cubes.clear();
-		players.clear();
 	}
 	
 }

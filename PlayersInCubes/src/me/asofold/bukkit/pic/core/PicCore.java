@@ -251,17 +251,11 @@ public final class PicCore{
 				return;
 			}
 			else{
-				// World change.
-				getCubeServer(pp.world).players.remove(player);
-				if (!settings.ignoreWorlds.contains(pp.world)){
-					// Old world was checked.
-					pp.checkOut();
-				}
+				// World change, remove from old CubeServer.
+				getCubeServer(pp.world).remove(pp);
 			}
 			// World change or new.
-			final CubeServer server = getCubeServer(world);
-			if (!server.players.isEmpty()) renderSeen(pp, server.players);
-			server.players.add(pp.playerName);
+			getCubeServer(world).add(pp, false);
 			pp.world = world;
 			pp.tsLoc = 0; // necessary.
 			// else: keep ignoring.
@@ -276,17 +270,14 @@ public final class PicCore{
 		if (!world.equals(pp.world)){
 			// World change into a checked world.
 			// Add to new CubeServer:
-			final CubeServer server = getCubeServer(world);
-			if (!server.players.isEmpty()) renderBlind(pp, server.players);
-			server.players.add(pp.playerName);
+			getCubeServer(world).add(pp, true);
 			// Check removal:
 			if (pp.world == null){
 				// Was a new player.
 			}
 			else{
 				// Remove from old server (light).
-				getCubeServer(pp.world).players.remove(pp.playerName);
-				pp.checkOut();
+				getCubeServer(pp.world).remove(pp);
 			}
 		}
 		else if (settings.durExpireData > 0  && ts - pp.tsLoc > settings.durExpireData){
