@@ -58,6 +58,10 @@ public final class PicCore{
 		enabled = settings.enabled;
 	}
 	
+	public Settings getSettings(){
+		return settings;
+	}
+	
 	public final boolean reload() {
 		final File file = new File(dataFolder, "config.yml");
 		final Settings settings = Settings.load(file);
@@ -88,22 +92,14 @@ public final class PicCore{
 		return true;
 	}
 	
+	public final boolean isEnabled(){
+		return enabled;
+	}
+	
 	public final Stats getStats(){
 		return stats;
 	}
-	
-	public final String getInfoMessage() {
-		final StringBuilder b = new StringBuilder();
-		b.append("[PIC][INFO] PlayersInCubes is ");
-		b.append((enabled ? "enabled.":"DISABLED."));
-		b.append(" cube.size=" + settings.cubeSize);
-		b.append(" cube.distance=" + settings.distCube);
-		b.append(" lazy.distance=" + settings.distLazy);
-		b.append(" lazy.lifetime=" + (settings.durExpireData / 1000));
-//		b.append(" | ");
-		b.append(" | (More: /pic stats)");
-		return b.toString();
-	}
+
 	
 	/**
 	 * Get the cube server for the world, will create it if not yet existent.

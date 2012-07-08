@@ -72,7 +72,8 @@ Configuration
 * lazy.lifetime
     Duration in seconds after wich a re-check of a player is forced,
      if the player moves, in any case. Set to 0 to not use this.
-    This is probably unnecessary to set, ever.
+    This is probably unnecessary to set, but it will force accuracy,
+     when players passed a cube border staying within lazy.distance.
     
 The configuration can be reloaded at runtime (see commands section).
 
@@ -122,6 +123,7 @@ STACK
 ? log y-level (interesting for choice of config parameters).
 
 *** STRUCTURE AND EFFICIENCY
+? make initial hashMap size configurable for some things (CubeServer/cubes)
 ? use only PicPlayer.playerName internally to switch to == somewhere (Do HashSet or String.equals check that first ?)
 ? refactor a bit for CubeServer.players ? more stuff from core to CubeServer ?
 
@@ -137,7 +139,7 @@ STACK
 !(adjust) Check for ignored worlds on checkouts (compatibility).
 
 *** API
-? Add minimum API: canPlayerSee(world, x, y, z) canPlayerSeePlayer(p1, p2), isWorldIgnore and the like.
+? Add minimum API: canPlayerSee(world, x, y, z) canPlayerSeePlayer(p1, p2), isWorldIgnore getPlayersInWorld and the like.
 
 
 *** DOC
@@ -149,10 +151,21 @@ STACK
 *** ISSUES
 ? Check: surprisingly many cubes get removed from players on checking.
 
+? probably not : give allPlayers to cubeServer ? => more efficient renderBLind(world!), or renderBLind(pp, server, ignored)
+change renderAllBlind etc to only check vs. the players in that world ? [consistency trouble]
+
+*** convention: Every world has a CubeServer that tracks players.
+*** !! check: world changing etc  
+*** renderBlind etc at world entry , so more lazy treatment is possible.
 
 
 VERSION HISTORY
 ----------------------------------
+
+(1.2.0)
+- (add) Version to info message.
+- (bugfix) Potentially fixed treatment of (ignored) worlds.
+- (adjust) Some internal tweaks/cleanups.
 
 (1.1.1)
 - (bugfix) Save settings if enable or disable is used + correct messages and behavior.

@@ -1,5 +1,6 @@
 package me.asofold.bukkit.pic;
 
+import me.asofold.bukkit.pic.config.Settings;
 import me.asofold.bukkit.pic.core.PicCore;
 import me.asofold.bukkit.pic.listeners.PicListener;
 import me.asofold.bukkit.pic.util.Utils;
@@ -66,7 +67,7 @@ public final class PlayersInCubes extends JavaPlugin {
 		}
 		else if (len == 1 && cmd.equals("info")){
 			if (!Utils.checkPerm(sender, "playersincubes.info")) return true;
-			sender.sendMessage(core.getInfoMessage());
+			sender.sendMessage(getInfoMessage());
 			return true;
 		}
 		else if (len == 1 && cmd.equals("disable")){
@@ -82,6 +83,20 @@ public final class PlayersInCubes extends JavaPlugin {
 			return true;
 		}
 		return false;
+	}
+	
+	public final String getInfoMessage() {
+		final Settings settings = core.getSettings();
+		final StringBuilder b = new StringBuilder();
+		b.append("[PIC][INFO] PlayersInCubes " + getDescription().getVersion() +" is ");
+		b.append((settings.enabled ? "enabled.":"DISABLED."));
+		b.append(" cube.size=" + settings.cubeSize);
+		b.append(" cube.distance=" + settings.distCube);
+		b.append(" lazy.distance=" + settings.distLazy);
+		b.append(" lazy.lifetime=" + (settings.durExpireData / 1000));
+//		b.append(" | ");
+		b.append(" | (More: /pic stats)");
+		return b.toString();
 	}
 	
 }
