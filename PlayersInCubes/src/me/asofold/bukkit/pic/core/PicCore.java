@@ -300,7 +300,7 @@ public final class PicCore{
 		this.enabled = enabled;
 		if (enabled) checkAllOnlinePlayers();
 		else clear(false); // Renders all visible.
-		settings.enabled = this.enabled;
+		settings.enabled = enabled;
 		settings.save(file);
 		return true;
 	}
