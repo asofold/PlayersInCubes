@@ -261,7 +261,6 @@ public final class PicCore{
 			// World change or new.
 			final CubeServer server = getCubeServer(world);
 			if (!server.players.isEmpty()) renderSeen(pp, server.players);
-			renderSeen(pp, server.players); // TODO: Correct here ?
 			server.players.add(pp.playerName);
 			pp.world = world;
 			pp.tsLoc = 0; // necessary.
@@ -278,7 +277,7 @@ public final class PicCore{
 			// World change into a checked world.
 			// Add to new CubeServer:
 			final CubeServer server = getCubeServer(world);
-			renderBlind(pp, server.players);
+			if (!server.players.isEmpty()) renderBlind(pp, server.players);
 			server.players.add(pp.playerName);
 			// Check removal:
 			if (pp.world == null){
