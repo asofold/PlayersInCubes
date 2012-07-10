@@ -78,11 +78,18 @@ Configuration
 The configuration can be reloaded at runtime (see commands section).
 
 Implications: 
+* cube.distance should always be greater than cube.size/2 to have directly
+    neighboring cubes added, when the players stand right next to a border.  
+    In fact the distance is chosen such that you will see the next cube when
+     you are close but not too close to the border of the cube you are in,
+     while you will only be in one cube, when you are in its center.
+* Raising the distance for cubes will lead to a cubic (...) increase of the 
+    number of cubes held per player, so there will be a limit.
 * The maximal distance at which players might see each other,
     seems to be the sum of cube.size and cube.distance, the minimal distance
      at which players can not see each others will be the maximum of both.
     Still lazy.distance has to be counted in.
-
+     
 
 STRUCTURES
 ------------------
@@ -96,22 +103,25 @@ STRUCTURES
     that will be reset upon moving far enough (or after timeout).
     If no reset of the position is necessary, 
     no changes will be done to associated cubes.
+- Even ignored worlds hold a set of players that are in it.
 
 
 POSSIBLE OPTIMIZATIONS
 -------------------------------
+- Use int/Integer ids for the players and use those internally.
 - More optimization is possible with remembering the cube a player is in, 
     though that might contradict distCube
 - Cube lookup: Prevent object creation and some iterators and set creation, 
     lookup by hash directly (refactor to arrays + modulo?)
 - Store some objects longer / permanently, to avoid creating them newly.
-- Use sets of players in a world to make faster estimation whom to render visible on simple rechecks.
 
 
 POSSIBLE FEATURES
 ------------------------------
 - Permanently loaded cubes with special properties 
     + API (turn on lights in town, exclude area from checks, include for checks or the like ...).
+- Cube specific lazy.distance (a non pvp spawn region could use a bigger lazy dist for the center)
+- See-all cubes :) ... see-none cobes !
 - World specific settings (replacing ignore worlds, but also for other settings)
 
 
@@ -122,10 +132,11 @@ STACK
 ? Stats for some timings (Bukkit has such though)
 ? log y-level (interesting for choice of config parameters).
 
-*** STRUCTURE AND EFFICIENCY
+*** STRUCTURE AND EFFICIENCY AND CONSISTENCY
 ? make initial hashMap size configurable for some things (CubeServer/cubes)
 ? use only PicPlayer.playerName internally to switch to == somewhere (Do HashSet or String.equals check that first ?)
 ? refactor a bit for CubeServer.players ? more stuff from core to CubeServer ?
+? euklidian distance for cubes: might be useful, if smaller cube sizes are used to get a more round impression [subject to performance testing].
 
 *** VISIBILITY
 * access points: renderSeen renderBlind checkOut removeAllPlayers => PicPlayer invisible and see-all flags realistic.
@@ -149,12 +160,10 @@ STACK
 
 
 *** ISSUES
-? Check: surprisingly many cubes get removed from players on checking.
+? Check: surprisingly many cubes get removed from players on checking. <- not realy a surprise
 
 ? probably not : give allPlayers to cubeServer ? => more efficient renderBLind(world!), or renderBLind(pp, server, ignored)
 change renderAllBlind etc to only check vs. the players in that world ? [but: ?consistency trouble]
-
-*** convention: Every world has a CubeServer that tracks players.
 
 
 VERSION HISTORY
