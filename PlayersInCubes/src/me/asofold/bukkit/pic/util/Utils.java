@@ -15,11 +15,11 @@ public final class Utils {
         return (floor == x)? floor : floor - (int) (Double.doubleToRawLongBits(x) >>> 63);
     }
 	
-	public static boolean hasPermission(CommandSender sender, String perm){
+	public static final boolean hasPermission(final CommandSender sender, final String perm){
 		return sender.isOp() || sender.hasPermission(perm);
 	}
 	
-	public static boolean checkPerm(CommandSender sender, String perm){
+	public static final boolean checkPerm(final CommandSender sender, final String perm){
 		if (hasPermission(sender, perm)) return true;
 		sender.sendMessage("[Pic] You don't have permission.");
 		return false;
