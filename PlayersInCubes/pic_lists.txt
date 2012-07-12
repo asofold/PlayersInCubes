@@ -108,7 +108,8 @@ STRUCTURES
 
 POSSIBLE OPTIMIZATIONS
 -------------------------------
-- Use int/Integer ids for the players and use those internally.
+- Use int/Integer ids for the players and use those internally. 
+    [Use Minecraft ids - if ever mobs get done this will help...]
 - More optimization is possible with remembering the cube a player is in, 
     though that might contradict distCube
 - Cube lookup: Prevent object creation and some iterators and set creation, 
@@ -118,11 +119,22 @@ POSSIBLE OPTIMIZATIONS
 
 POSSIBLE FEATURES
 ------------------------------
+- Ability to have single players see all at any distance.
+- Ability to have single players see none.
+- Ability to hide single players from everyone [with exceptions?].
+- Ability to have certain players be seen by everyone on any distance.
+- Ability to use PlayersInCubes not for hiding or showing players,
+    but to know what a player can see.
+- World specific "abilities":
+    Different settings for different worlds, 
+     ability to distinguish above abilities per world.
+    (Also replaces ignore-worlds.)
 - Permanently loaded cubes with special properties 
-    + API (turn on lights in town, exclude area from checks, include for checks or the like ...).
-- Cube specific lazy.distance (a non pvp spawn region could use a bigger lazy dist for the center)
-- See-all cubes :) ... see-none cobes !
-- World specific settings (replacing ignore worlds, but also for other settings)
+    + API (turn on lights in town, exclude area from checks, 
+            include for checks or the like ...).
+- Cube specific lazy.distance 
+    (a non pvp spawn region could use a bigger lazy dist for the center)
+- Very distant: hide mobs too.
 
 
 STACK
@@ -143,7 +155,7 @@ STACK
 !must: multi world support to not intermingle with other visibility changing plugins for certain worlds or players in any worlds.
 ? consider generic ways of who can see whom based on tags or so. -> unlikely 
 ? PicPlayer: add invisibility ? (but do respect who can be seen)
-? PicPlayer: add a way to see all others always (unless really vanished).
+? PicPlayer: add a way to see all others always (unless really vanished). -> must have: permission ?
 
 *** IGNORE WORLDS
 ? check: Make ignored worlds "untouched", i.e. only adjust things for players that move from / to / in checked worlds.
@@ -164,6 +176,8 @@ STACK
 
 ? probably not : give allPlayers to cubeServer ? => more efficient renderBLind(world!), or renderBLind(pp, server, ignored)
 change renderAllBlind etc to only check vs. the players in that world ? [but: ?consistency trouble]
+
+!CHECK: A much higher (context dependent) lazydist could be ok, depending on other settings.
 
 
 VERSION HISTORY
