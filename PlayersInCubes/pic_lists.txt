@@ -151,6 +151,8 @@ STACK
 ? euklidian distance for cubes: might be useful, if smaller cube sizes are used to get a more round impression [subject to performance testing].
 ? probably not : give allPlayers to cubeServer ? => more efficient renderBLind(world!), or renderBLind(pp, server, ignored)
 change renderAllBlind etc to only check vs. the players in that world ? [but: ?consistency trouble]
+!More efficient hiding etc, avoid hide+show: check against the set of players of the cube a player is inside of (== for cubes?).
+
 
 *** VISIBILITY
 * access points: renderSeen renderBlind checkOut removeAllPlayers => PicPlayer invisible and see-all flags realistic.
@@ -177,6 +179,11 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 ? Check: surprisingly many cubes get removed from players on checking. <- not really a surprise
 !CHECK: A much higher (context dependent) lazydist could be ok, depending on other settings. <- not sure :)
 ! potential bug: checkout renders blind always! so check: what worlds are players in, are they ignored etc.
+
+
+*** NEW
+
+make configurable to add: getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(player.getPlayerListName(), false, 9999));
 
 
 VERSION HISTORY
