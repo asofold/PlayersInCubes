@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.config.compatlayer;
+package me.asofold.bpl.pic.config.compatlayer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

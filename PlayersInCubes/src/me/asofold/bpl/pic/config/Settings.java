@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.config;
+package me.asofold.bpl.pic.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 
-import me.asofold.bukkit.pic.config.compatlayer.CompatConfig;
-import me.asofold.bukkit.pic.config.compatlayer.CompatConfigFactory;
-import me.asofold.bukkit.pic.config.compatlayer.ConfigUtil;
+import me.asofold.bpl.pic.config.compatlayer.CompatConfig;
+import me.asofold.bpl.pic.config.compatlayer.CompatConfigFactory;
+import me.asofold.bpl.pic.config.compatlayer.ConfigUtil;
 
 
 /**

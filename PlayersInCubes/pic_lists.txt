@@ -189,6 +189,9 @@ make configurable to add: getHandle().netServerHandler.sendPacket(new Packet201P
 VERSION HISTORY
 ----------------------------------
 
+(2.0.0)
+- (CHANGE) Packet naming.
+
 (1.2.1)
 - (bugfix) npe.
 

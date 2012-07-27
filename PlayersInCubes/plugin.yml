@@ -1,6 +1,6 @@
 name: PlayersInCubes
-main: me.asofold.bukkit.pic.PlayersInCubes
-version: 1.3.0
+main: me.asofold.bpl.pic.PlayersInCubes
+version: 2.0.0
 
 commands:
   playersincubes:

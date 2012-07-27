@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.core;
+package me.asofold.bpl.pic.core;
 
 /**
  * Hash taken from some web reference about spatial hashing (very common).

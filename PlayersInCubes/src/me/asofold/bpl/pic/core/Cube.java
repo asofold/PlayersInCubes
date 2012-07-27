@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.core;
+package me.asofold.bpl.pic.core;
 
 /**
  * Extends the cube related coordinates by convenience measures to check faster if players are in range.

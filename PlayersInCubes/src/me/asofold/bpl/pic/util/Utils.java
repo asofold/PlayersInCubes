@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.util;
+package me.asofold.bpl.pic.util;
 
 import org.bukkit.command.CommandSender;
 

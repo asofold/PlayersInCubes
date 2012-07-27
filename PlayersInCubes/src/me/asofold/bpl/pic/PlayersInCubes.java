@@ -1,9 +1,9 @@
-package me.asofold.bukkit.pic;
+package me.asofold.bpl.pic;
 
-import me.asofold.bukkit.pic.config.Settings;
-import me.asofold.bukkit.pic.core.PicCore;
-import me.asofold.bukkit.pic.listeners.PicListener;
-import me.asofold.bukkit.pic.util.Utils;
+import me.asofold.bpl.pic.config.Settings;
+import me.asofold.bpl.pic.core.PicCore;
+import me.asofold.bpl.pic.listeners.PicListener;
+import me.asofold.bpl.pic.util.Utils;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

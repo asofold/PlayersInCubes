@@ -1,12 +1,12 @@
-package me.asofold.bukkit.pic.core;
+package me.asofold.bpl.pic.core;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.asofold.bukkit.pic.config.Settings;
-import me.asofold.bukkit.pic.stats.Stats;
+import me.asofold.bpl.pic.config.Settings;
+import me.asofold.bpl.pic.stats.Stats;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

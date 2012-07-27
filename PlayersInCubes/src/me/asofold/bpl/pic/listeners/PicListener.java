@@ -1,6 +1,6 @@
-package me.asofold.bukkit.pic.listeners;
+package me.asofold.bpl.pic.listeners;
 
-import me.asofold.bukkit.pic.core.PicCore;
+import me.asofold.bpl.pic.core.PicCore;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

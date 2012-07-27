@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.core;
+package me.asofold.bpl.pic.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;

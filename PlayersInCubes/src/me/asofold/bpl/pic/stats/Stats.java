@@ -1,4 +1,4 @@
-package me.asofold.bukkit.pic.stats;
+package me.asofold.bpl.pic.stats;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
