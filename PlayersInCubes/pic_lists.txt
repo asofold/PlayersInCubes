@@ -181,13 +181,11 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 ! potential bug: checkout renders blind always! so check: what worlds are players in, are they ignored etc.
 
 
-*** NEW
-
-make configurable to add: getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(player.getPlayerListName(), false, 9999));
-
-
 VERSION HISTORY
 ----------------------------------
+
+(2.1.0)
+- (add) Send fake packets to make players names show up in the list, though hidden.
 
 (2.0.0)
 - (CHANGE) Packet naming.
