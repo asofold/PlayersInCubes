@@ -74,6 +74,9 @@ Configuration
      if the player moves, in any case. Set to 0 to not use this.
     This is probably unnecessary to set, but it will force accuracy,
      when players passed a cube border staying within lazy.distance.
+* send-packets
+    If to send player info packets to keep the player lists up to date,
+     even for players that can not see each other.
     
 The configuration can be reloaded at runtime (see commands section).
 
