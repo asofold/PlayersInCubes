@@ -7,9 +7,11 @@ import java.util.Map;
 
 import me.asofold.bpl.pic.config.Settings;
 import me.asofold.bpl.pic.stats.Stats;
+import net.minecraft.server.Packet201PlayerInfo;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -135,8 +137,8 @@ public final class PicCore{
 		for (final String name : names){
 			final PicPlayer opp = players.get(name);
 			 if (opp == null) continue; // TODO: ERROR, find out.
-			if (player.canSee(opp.bPlayer)) player.hidePlayer(opp.bPlayer);
-			if (opp.bPlayer.canSee(player)) opp.bPlayer.hidePlayer(player);
+			if (player.canSee(opp.bPlayer)) hidePlayer(player, opp.bPlayer); //player.hidePlayer(opp.bPlayer);
+			if (opp.bPlayer.canSee(player)) hidePlayer(opp.bPlayer, player); //opp.bPlayer.hidePlayer(player);
 		}
 	}
 	
@@ -167,6 +169,23 @@ public final class PicCore{
 		cubeServers.clear();
 	}
 	
+	public final void hidePlayer(final Player player, final Player playerToHide){
+		player.hidePlayer(playerToHide);
+		((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(playerToHide.getPlayerListName(), true, 9999));
+	}
+	
+	public final void onQuit(final Player player) {
+		final String worldName = player.getWorld().getName();
+		if (!settings.ignoreWorlds.contains(worldName.toLowerCase())){
+			for (final Player other : Bukkit.getOnlinePlayers()){
+				if (other.isOnline() && other.getWorld().getName().equals(worldName)){
+					((CraftPlayer) other).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(player.getPlayerListName(), false, 9999));
+				}
+			}
+		}
+		checkOut(player);
+	}
+	
 	/**
 	 * Quit, kick.
 	 * @param player
@@ -178,8 +197,8 @@ public final class PicCore{
 		if (pp == null){ // contract ?
 			for (final PicPlayer opp : players.values()){
 				if (opp.playerName.equals(playerName)) continue;
-				if (opp.bPlayer.canSee(player)) opp.bPlayer.hidePlayer(player);
-				if (player.canSee(opp.bPlayer)) player.hidePlayer(opp.bPlayer);
+				if (opp.bPlayer.canSee(player)) hidePlayer(opp.bPlayer, player); // opp.bPlayer.hidePlayer(player);
+				if (player.canSee(opp.bPlayer)) hidePlayer(player, opp.bPlayer); //  player.hidePlayer(opp.bPlayer);
 			}
 		}
 		else{

@@ -53,12 +53,12 @@ public final class PicListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.MONITOR)
 	final void quit(final PlayerQuitEvent event){
-		core.checkOut(event.getPlayer());
+		core.onQuit(event.getPlayer()); //core.checkOut(event.getPlayer());
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
 	final void kick(final PlayerKickEvent event){
-		core.checkOut(event.getPlayer());
+		core.onQuit(event.getPlayer()); //core.checkOut(event.getPlayer());
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR)
