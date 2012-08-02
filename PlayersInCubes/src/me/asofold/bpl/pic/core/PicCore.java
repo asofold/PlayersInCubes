@@ -171,12 +171,12 @@ public final class PicCore{
 	
 	public final void hidePlayer(final Player player, final Player playerToHide){
 		player.hidePlayer(playerToHide);
-		((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(playerToHide.getPlayerListName(), true, 9999));
+		if (settings.sendPackets) ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(playerToHide.getPlayerListName(), true, 9999));
 	}
 	
 	public final void onQuit(final Player player) {
 		final String worldName = player.getWorld().getName();
-		if (!settings.ignoreWorlds.contains(worldName.toLowerCase())){
+		if (settings.sendPackets && !settings.ignoreWorlds.contains(worldName.toLowerCase())){
 			for (final Player other : Bukkit.getOnlinePlayers()){
 				if (other.isOnline() && other.getWorld().getName().equals(worldName)){
 					((CraftPlayer) other).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(player.getPlayerListName(), false, 9999));
