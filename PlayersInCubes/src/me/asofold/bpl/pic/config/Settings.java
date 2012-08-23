@@ -25,7 +25,9 @@ public class Settings {
 	static final String pathDistCube = "cube.distance";
 	static final String pathDistLazy = "lazy.distance";
 	static final String pathDurExpireData = "lazy.lifetime";
-	static final String pathSendPackets = "send-packets";
+	static final String pathPackets = "packets";
+	static final String pathSendPackets = pathPackets + ".enabled";
+//	static final String pathBroadcastQuit = pathPackets + ".broadcast-quit";
 	static final String pathIgnoreWorlds = "ignore-worlds";
 	
 	/**

@@ -11,6 +11,7 @@ import net.minecraft.server.Packet201PlayerInfo;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -175,15 +176,12 @@ public final class PicCore{
 	}
 	
 	public final void onQuit(final Player player) {
-		final String worldName = player.getWorld().getName();
-		if (settings.sendPackets && !settings.ignoreWorlds.contains(worldName.toLowerCase())){
-			for (final Player other : Bukkit.getOnlinePlayers()){
-				if (other.isOnline() && other.getWorld().getName().equals(worldName)){
-					((CraftPlayer) other).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(player.getPlayerListName(), false, 9999));
-				}
-			}
-		}
 		checkOut(player);
+		if (settings.sendPackets){
+			final String listName = player.getPlayerListName();
+			// TODO: this remains fishy, somewhat.
+			((CraftServer) Bukkit.getServer()).getHandle().sendAll(new Packet201PlayerInfo(listName, false, 9999));
+		}
 	}
 	
 	/**
