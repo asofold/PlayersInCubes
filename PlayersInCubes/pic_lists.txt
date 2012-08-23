@@ -132,6 +132,7 @@ POSSIBLE FEATURES
     Different settings for different worlds, 
      ability to distinguish above abilities per world.
     (Also replaces ignore-worlds.)
+- Exact hiding and showing feature: use cubes to reduce players to check vs. each other.
 - Permanently loaded cubes with special properties 
     + API (turn on lights in town, exclude area from checks, 
             include for checks or the like ...).
@@ -184,8 +185,13 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 ! potential bug: checkout renders blind always! so check: what worlds are players in, are they ignored etc.
 
 
+
 VERSION HISTORY
 ----------------------------------
+
+(2.1.1)
+- (bugfix) Send packets to all players if a player quits.
+- (change) Configuration path for send-packets: packets.enabled
 
 (2.1.0)
 - (add) Send fake packets to make players names show up in the list, though hidden.
