@@ -200,7 +200,7 @@ public final class PicCore{
 			}
 		}
 		else{
-			if (pp.world != null) getCubeServer(pp.world).players.remove(player);
+			if (pp.world != null) getCubeServer(pp.world).players.remove(pp.playerName);
 			renderBlind(pp, pp.checkOut());
 			players.remove(pp.playerName); // TODO: maybe hold data longer.
 		}

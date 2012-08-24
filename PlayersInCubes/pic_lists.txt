@@ -190,6 +190,9 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 VERSION HISTORY
 ----------------------------------
 
+(2.1.2)
+- (bugfix) Potential fix: Check against pp.playerName, not Player.
+
 (2.1.1)
 - (bugfix) Send packets to all players if a player quits.
 - (change) Configuration path for send-packets: packets.enabled
