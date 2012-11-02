@@ -1,4 +1,4 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic.cubelib.server;
 
 import java.util.Collection;
 
@@ -9,11 +9,11 @@ import me.asofold.bpl.pic.stats.Stats;
  * @author mc_dev
  *
  */
-public interface ICore {
+public interface ICubeCore {
 
-	public void outOfRange(PicPlayer pp, Collection<String> names);
+	public void outOfRange(CubePlayer pp, Collection<String> names);
 
-	public void inRange(PicPlayer pp, Collection<String> names);
+	public void inRange(CubePlayer pp, Collection<String> names);
 	
 	public Stats getStats();
 

@@ -1,7 +1,10 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic.cubelib.server;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import me.asofold.bpl.pic.cubelib.cubes.Cube;
+import me.asofold.bpl.pic.cubelib.cubes.CubePos;
 
 /**
  * 
@@ -11,7 +14,7 @@ import java.util.Set;
 public final class CubeData {
 	
 	
-	public final Set<String> canView = new LinkedHashSet<String>();
+	public final Set<String> inRange = new LinkedHashSet<String>();
 //	public final Set<String> inside = new HashSet<String>();
 	
 	public final Cube cube;
@@ -23,15 +26,15 @@ public final class CubeData {
 		this.server = server;
 	}
 
-	public void remove(PicPlayer pp) {
-		canView.remove(pp.playerName);
-//		server.renderBlind(pp, canView);
-		if (canView.isEmpty()) server.cubeEmpty(this);
+	public void remove(CubePlayer pp) {
+		inRange.remove(pp.playerName);
+//		server.renderBlind(pp, inRange);
+		if (inRange.isEmpty()) server.cubeEmpty(this);
 	}
 	
-	public void add(PicPlayer pp) {
-//		if (!canView.isEmpty()) server.renderSeen(pp, canView);
-		canView.add(pp.playerName);
+	public void add(CubePlayer pp) {
+//		if (!inRange.isEmpty()) server.renderSeen(pp, inRange);
+		inRange.add(pp.playerName);
 	}
 
 	@Override

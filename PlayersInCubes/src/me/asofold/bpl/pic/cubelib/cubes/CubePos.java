@@ -1,4 +1,4 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic.cubelib.cubes;
 
 /**
  * Hash taken from some web reference about spatial hashing (very common).

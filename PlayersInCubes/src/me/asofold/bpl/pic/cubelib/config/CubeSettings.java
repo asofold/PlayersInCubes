@@ -1,4 +1,4 @@
-package me.asofold.bpl.pic.config;
+package me.asofold.bpl.pic.cubelib.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +18,16 @@ import me.asofold.bpl.pic.config.compatlayer.ConfigUtil;
  * @author mc_dev
  *
  */
-public class Settings {
+public class CubeSettings {
 	
-	static final String pathEnabled = "enabled";
-	static final String pathCubeSize = "cube.size";
-	static final String pathDistCube = "cube.distance";
-	static final String pathDistLazy = "lazy.distance";
-	static final String pathDurExpireData = "lazy.lifetime";
-	static final String pathPackets = "packets";
-	static final String pathSendPackets = pathPackets + ".enabled";
+	protected static final String pathEnabled = "enabled";
+	protected static final String pathCubeSize = "cube.size";
+	protected static final String pathDistCube = "cube.distance";
+	protected static final String pathDistLazy = "lazy.distance";
+	protected static final String pathDurExpireData = "lazy.lifetime";
+	protected static final String pathPackets = "packets";
 //	static final String pathBroadcastQuit = pathPackets + ".broadcast-quit";
-	static final String pathIgnoreWorlds = "ignore-worlds";
+	protected static final String pathIgnoreWorlds = "ignore-worlds";
 	
 	/**
 	 * If to do checks at all.
@@ -82,8 +81,8 @@ public class Settings {
 	 * @param file
 	 * @return
 	 */
-	public static Settings loadSettings(Settings settings, CompatConfig cfg) {
-		Settings ref = new Settings();
+	public static CubeSettings loadSettings(CubeSettings settings, CompatConfig cfg) {
+		CubeSettings ref = new CubeSettings();
 		settings.enabled = cfg.getBoolean(pathEnabled, ref.enabled);
 		settings.cubeSize = cfg.getInt(pathCubeSize, ref.cubeSize);
 		settings.distCube = cfg.getInt(pathDistCube, ref.distCube);
@@ -99,7 +98,7 @@ public class Settings {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				Bukkit.getLogger().severe("[PIC] Could not create empty file: " + file.getAbsolutePath());
+				Bukkit.getLogger().severe("[CubeSettings] Could not create empty file: " + file.getAbsolutePath());
 				e.printStackTrace();
 			}
 		}

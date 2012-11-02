@@ -1,8 +1,7 @@
 package me.asofold.bpl.pic;
 
-import me.asofold.bpl.pic.config.Settings;
-import me.asofold.bpl.pic.core.PicCore;
-import me.asofold.bpl.pic.listeners.CoreListener;
+import me.asofold.bpl.pic.cubelib.config.CubeSettings;
+import me.asofold.bpl.pic.cubelib.listener.CubeListener;
 import me.asofold.bpl.pic.util.Utils;
 
 import org.bukkit.command.Command;
@@ -13,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PlayersInCubes extends JavaPlugin {
 	
 	private final PicCore core = new PicCore();
-	private final CoreListener listener = new CoreListener(core);
+	private final CubeListener listener = new CubeListener(core);
 	
 	public PlayersInCubes(){
 		core.setDataFolder(getDataFolder());
@@ -44,7 +43,7 @@ public final class PlayersInCubes extends JavaPlugin {
 		if (len > 0) cmd = args[0].trim().toLowerCase();
 		if (len == 1 && cmd.equals("reload")){
 			if (!Utils.checkPerm(sender, "playersincubes.reload")) return true;
-			if (core.reload()) sender.sendMessage("[PIC] Settings reloaded.");
+			if (core.reload()) sender.sendMessage("[PIC] CubeSettings reloaded.");
 			else sender.sendMessage("[PIC] Reloading the settings failed.");
 			return true;
 		}
@@ -86,7 +85,7 @@ public final class PlayersInCubes extends JavaPlugin {
 	}
 	
 	public final String getInfoMessage() {
-		final Settings settings = core.getSettings();
+		final CubeSettings settings = core.getSettings();
 		final StringBuilder b = new StringBuilder();
 		b.append("[PIC][INFO] PlayersInCubes " + getDescription().getVersion() +" is ");
 		b.append((settings.enabled ? "enabled.":"DISABLED."));

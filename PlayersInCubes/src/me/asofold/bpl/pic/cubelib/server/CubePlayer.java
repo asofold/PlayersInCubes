@@ -1,4 +1,4 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic.cubelib.server;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -10,7 +10,7 @@ import me.asofold.bpl.pic.stats.Stats;
 
 import org.bukkit.entity.Player;
 
-public class PicPlayer {
+public class CubePlayer {
 	
 	/**
 	 * Cubes the player is registered in.
@@ -25,13 +25,15 @@ public class PicPlayer {
 	public int y;
 	public int z;
 	
-	final Player bPlayer;
+	public final Player bPlayer;
 	private final Stats stats;
+	private final Integer idPPRemCubes;
 	
-	public PicPlayer(final Player player, final Stats stats){
+	public CubePlayer(final Player player, final Stats stats){
 		this.bPlayer = player;
 		playerName = player.getName();
 		this.stats = stats;
+		idPPRemCubes = stats.getId("pp_remcubes", true);
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class PicPlayer {
 		final Set<String> out = new HashSet<String>();
 		for (final CubeData cube : cubes){
 			cube.remove(this);
-			if (!cube.canView.isEmpty()) out.addAll(cube.canView);
+			if (!cube.inRange.isEmpty()) out.addAll(cube.inRange);
 		}
 		cubes.clear();
 		return out;
@@ -63,11 +65,11 @@ public class PicPlayer {
 			if (!cube.cube.inRange(x, y, z, distCube)){
 				cube.remove(this);
 				rem.add(cube);
-				out.addAll(cube.canView);
+				out.addAll(cube.inRange);
 			}
 		}
 		cubes.removeAll(rem);
-		stats.addStats(PicCore.idPPRemCubes, rem.size());
+		stats.addStats(idPPRemCubes, rem.size());
 		return out;
 	}
 	

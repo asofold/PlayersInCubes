@@ -1,22 +1,25 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic.cubelib;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import me.asofold.bpl.pic.config.Settings;
+import me.asofold.bpl.pic.cubelib.config.CubeSettings;
+import me.asofold.bpl.pic.cubelib.server.CubePlayer;
+import me.asofold.bpl.pic.cubelib.server.CubeServer;
+import me.asofold.bpl.pic.cubelib.server.ICubeCore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public abstract class AbstractCore<S extends Settings> implements ICore{
+public abstract class AbstractCubeCore<S extends CubeSettings> implements ICubeCore{
 	
 	
 	protected boolean enabled = true;
 	
 	/**
-	 * Settings.
+	 * CubeSettings.
 	 */
 	protected S settings;
 	
@@ -28,9 +31,9 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	/**
 	 * Player specific data / lookup.
 	 */
-	protected final Map<String, PicPlayer> players = new LinkedHashMap<String, PicPlayer>(517);
+	protected final Map<String, CubePlayer> players = new LinkedHashMap<String, CubePlayer>(517);
 	
-	public AbstractCore(S settings){
+	public AbstractCubeCore(S settings){
 		this.settings = settings;
 	}
 	
@@ -78,12 +81,12 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	 */
 	protected void removeAllPlayers(final boolean outOfRange) {
 		if (outOfRange){
-			for (final PicPlayer pp : players.values()){
+			for (final CubePlayer pp : players.values()){
 				outOfRange(pp, pp.checkOut());
 			}
 		}
 		else{
-			for (final PicPlayer pp : players.values()){
+			for (final CubePlayer pp : players.values()){
 				pp.checkOut(); // Ignore return value.
 			}
 		}
@@ -105,7 +108,7 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	public void checkOut(final Player player) {
 		if (!enabled) return;
 		final String playerName = player.getName();
-		final PicPlayer pp = players.get(playerName);
+		final CubePlayer pp = players.get(playerName);
 		if (pp != null) checkOut(pp);
 	}
 	
@@ -113,7 +116,7 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	 * Called for present player data (quit, kick).
 	 * @param player
 	 */
-	public final void checkOut(final PicPlayer pp) {
+	public final void checkOut(final CubePlayer pp) {
 		if (!enabled) return;
 		if (pp.world != null) getCubeServer(pp.world).players.remove(pp.playerName);
 		outOfRange(pp, pp.checkOut());
@@ -131,15 +134,15 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	}
 	
 	/**
-	 * Get PicPlayer, put to internals, if not present.
+	 * Get CubePlayer, put to internals, if not present.
 	 * @param player
 	 * @return
 	 */
-	private final PicPlayer getPicPlayer(final Player player){
+	private final CubePlayer getCubePlayer(final Player player){
 		final String name = player.getName();
-		final PicPlayer pp = players.get(name);
+		final CubePlayer pp = players.get(name);
 		if (pp != null) return pp;
-		final PicPlayer npp = new PicPlayer(player, getStats());
+		final CubePlayer npp = new CubePlayer(player, getStats());
 		players.put(name, npp);
 		return npp;
 	}
@@ -165,7 +168,7 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	 */
 	public final void check(final Player player, final Location to) {
 		if (!enabled) return;
-		final PicPlayer pp =  getPicPlayer(player);
+		final CubePlayer pp =  getCubePlayer(player);
 		final String world = to.getWorld().getName();
 		if (settings.ignoreWorlds.contains(world)){
 			// Moving in a ignored world.
@@ -228,9 +231,9 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 		getCubeServer(world).update(pp, settings.distCube);
 	}
 	
-	public abstract void outOfRange(final PicPlayer pp, final Collection<String> names);
+	public abstract void outOfRange(final CubePlayer pp, final Collection<String> names);
 	
-	public abstract void inRange(final PicPlayer pp, final Collection<String> names);
+	public abstract void inRange(final CubePlayer pp, final Collection<String> names);
 	
 	
 }

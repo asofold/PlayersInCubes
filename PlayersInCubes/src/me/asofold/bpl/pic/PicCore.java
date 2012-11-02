@@ -1,9 +1,11 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic;
 
 import java.io.File;
 import java.util.Collection;
 
 import me.asofold.bpl.pic.config.PicSettings;
+import me.asofold.bpl.pic.cubelib.AbstractCubeCore;
+import me.asofold.bpl.pic.cubelib.server.CubePlayer;
 import me.asofold.bpl.pic.stats.Stats;
 import net.minecraft.server.Packet201PlayerInfo;
 
@@ -17,14 +19,9 @@ import org.bukkit.entity.Player;
  * @author mc_dev
  *
  */
-public final class PicCore extends AbstractCore<PicSettings>{
+public final class PicCore extends AbstractCubeCore<PicSettings>{
 
 	private static final Stats stats = new Stats("[PIC]");
-	
-	static final Integer idPPCubes = stats.getNewId("pp_ncubes");
-	static final Integer idPPRemCubes= stats.getNewId("pp_remcubes");
-	static final Integer idPPSeen = stats.getNewId("pp_insight");
-	static final Integer idPPRemove = stats.getNewId("pp_offsight");
 	
 	private File dataFolder = null;
 	
@@ -75,9 +72,9 @@ public final class PicCore extends AbstractCore<PicSettings>{
 	public final void checkOut(final Player player) {
 		if (!enabled) return;
 		final String playerName = player.getName();
-		final PicPlayer pp = players.get(playerName);
+		final CubePlayer pp = players.get(playerName);
 		if (pp == null){ // contract ?
-			for (final PicPlayer opp : players.values()){
+			for (final CubePlayer opp : players.values()){
 				if (opp.playerName.equals(playerName)) continue;
 				if (opp.bPlayer.canSee(player)) hidePlayer(opp.bPlayer, player); // opp.bPlayer.hidePlayer(player);
 				if (player.canSee(opp.bPlayer)) hidePlayer(player, opp.bPlayer); //  player.hidePlayer(opp.bPlayer);
@@ -106,7 +103,7 @@ public final class PicCore extends AbstractCore<PicSettings>{
 		if (!outOfRange){
 			// Costly: basically quadratic time all vs. all.
 			final Player[] online = Bukkit.getOnlinePlayers();
-			for (final PicPlayer pp : players.values()){
+			for (final CubePlayer pp : players.values()){
 				for (final Player other : online){
 					if (!other.canSee(pp.bPlayer)) other.showPlayer(pp.bPlayer);
 					if (!pp.bPlayer.canSee(other)) pp.bPlayer.showPlayer(other);
@@ -117,10 +114,10 @@ public final class PicCore extends AbstractCore<PicSettings>{
 	}
 	
 	@Override
-	public final void outOfRange(final PicPlayer pp, final Collection<String> names) {
+	public final void outOfRange(final CubePlayer pp, final Collection<String> names) {
 		final Player player = pp.bPlayer;
 		for (final String name : names){
-			final PicPlayer opp = players.get(name);
+			final CubePlayer opp = players.get(name);
 			 if (opp == null) continue; // TODO: ERROR, find out.
 			if (player.canSee(opp.bPlayer)) hidePlayer(player, opp.bPlayer); //player.hidePlayer(opp.bPlayer);
 			if (opp.bPlayer.canSee(player)) hidePlayer(opp.bPlayer, player); //opp.bPlayer.hidePlayer(player);
@@ -128,10 +125,10 @@ public final class PicCore extends AbstractCore<PicSettings>{
 	}
 	
 	@Override
-	public final void inRange(final PicPlayer pp, final Collection<String> names) {
+	public final void inRange(final CubePlayer pp, final Collection<String> names) {
 		final Player player = pp.bPlayer;
 		for (final String name : names){
-			final PicPlayer opp = players.get(name);
+			final CubePlayer opp = players.get(name);
 			 if (opp == null) continue; // TODO: ERROR, find out.
 			if (!player.canSee(opp.bPlayer)) player.showPlayer(opp.bPlayer);
 			if (!opp.bPlayer.canSee(player)) opp.bPlayer.showPlayer(player);

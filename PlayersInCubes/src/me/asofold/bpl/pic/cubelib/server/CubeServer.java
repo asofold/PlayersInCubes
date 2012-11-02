@@ -1,4 +1,4 @@
-package me.asofold.bpl.pic.core;
+package me.asofold.bpl.pic.cubelib.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import me.asofold.bpl.pic.cubelib.cubes.Cube;
+import me.asofold.bpl.pic.cubelib.cubes.CubePos;
 import me.asofold.bpl.pic.stats.Stats;
 
 /**
@@ -17,21 +19,27 @@ public final class CubeServer {
 	
 	private final Map<CubePos, CubeData> cubes = new HashMap<CubePos, CubeData>(500);
 	
-	private final Stats stats;
-	
 	public final Set<String> players = new HashSet<String>();
 	
-	public final ICore core;
+	public final ICubeCore core;
 
 	public final int cubeSize;
 
 	public final String world;
+	
+	private final Stats stats;
 	private final Integer idCubes;
+	private final Integer idPPCubes;
+	private final Integer idPPSeen;
+	private final Integer idPPRemove;
 
-	public CubeServer(final String world, final ICore core, int cubeSize){
+	public CubeServer(final String world, final ICubeCore core, int cubeSize){
 		this.world  = world;
 		stats = core.getStats();
 		idCubes = stats.getId("ncubes_" + world, true);
+		idPPCubes = stats.getNewId("pp_ncubes");
+		idPPSeen = stats.getNewId("pp_insight");
+		idPPRemove = stats.getNewId("pp_offsight");
 		this.core = core;
 		this.cubeSize = cubeSize;
 	}
@@ -55,11 +63,11 @@ public final class CubeServer {
 	}
 
 
-	public final void outOfRange(final PicPlayer pp, final Set<String> names) {
+	public final void outOfRange(final CubePlayer pp, final Set<String> names) {
 		core.outOfRange(pp, names);
 	}
 	
-	public final void inRange(final PicPlayer pp, final Set<String> names) {
+	public final void inRange(final CubePlayer pp, final Set<String> names) {
 		core.inRange(pp, names);
 	}
 	
@@ -68,7 +76,7 @@ public final class CubeServer {
 	 * TODO: maybe also check rightaway ?
 	 * @param pp
 	 */
-	public final void add(final PicPlayer pp, final boolean blind){
+	public final void add(final CubePlayer pp, final boolean blind){
 		if (!players.isEmpty()){
 			if (blind) core.outOfRange(pp, players);
 			else core.inRange(pp, players);	
@@ -80,7 +88,7 @@ public final class CubeServer {
 	 * Remove player from players set, checkout.
 	 * @param pp
 	 */
-	public final void remove(final PicPlayer pp){
+	public final void remove(final CubePlayer pp){
 		players.remove(pp.playerName);
 		if (!pp.cubes.isEmpty()) pp.checkOut();
 	}
@@ -90,7 +98,7 @@ public final class CubeServer {
 	 * @param pp
 	 * @param distCube Maximal distance to cube centers.
 	 */
-	public final void update(final PicPlayer pp, final int distCube) {
+	public final void update(final CubePlayer pp, final int distCube) {
 		// Remove cubes that are too far.
 		final Set<String> rem = pp.checkCubes(distCube);
 		// Dumb: check all cubes within distance
@@ -102,7 +110,7 @@ public final class CubeServer {
 					// TODO: optimize here and just get the hash later 
 					final CubePos pos = new CubePos(x / cubeSize, y / cubeSize, z / cubeSize);
 					if (pp.cubes.contains(pos)){
-						seen.addAll(cubes.get(pos).canView);
+						seen.addAll(cubes.get(pos).inRange);
 						continue;
 					}
 					CubeData data = cubes.get(pos);
@@ -113,7 +121,7 @@ public final class CubeServer {
 						data.add(pp);
 						pp.cubes.add(data);
 					} else{
-						seen.addAll(data.canView);
+						seen.addAll(data.inRange);
 						data.add(pp);
 						pp.cubes.add(data);
 					}
@@ -134,9 +142,9 @@ public final class CubeServer {
 		seen.remove(pp.playerName);
 		if (!seen.isEmpty()) core.inRange(pp, seen); // Contains all already seen people, though !
 		// Add stats:
-		stats.addStats(PicCore.idPPCubes, pp.cubes.size());
-		stats.addStats(PicCore.idPPSeen, seen.size());
-		stats.addStats(PicCore.idPPRemove, szRem);
+		stats.addStats(idPPCubes, pp.cubes.size());
+		stats.addStats(idPPSeen, seen.size());
+		stats.addStats(idPPRemove, szRem);
 		stats.addStats(idCubes, cubes.size());
 	}
 	

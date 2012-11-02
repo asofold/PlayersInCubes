@@ -5,9 +5,10 @@ import java.io.File;
 import me.asofold.bpl.pic.config.compatlayer.CompatConfig;
 import me.asofold.bpl.pic.config.compatlayer.CompatConfigFactory;
 import me.asofold.bpl.pic.config.compatlayer.ConfigUtil;
+import me.asofold.bpl.pic.cubelib.config.CubeSettings;
 
-public class PicSettings extends Settings {
-	
+public class PicSettings extends CubeSettings {
+	protected static final String pathSendPackets = pathPackets + ".enabled";
 	/**
 	 * To send fake packets to keep / remove players in/from the tab player list.
 	 */
@@ -29,7 +30,7 @@ public class PicSettings extends Settings {
 			cfg.save();
 		}
 		PicSettings settings = new PicSettings();
-		Settings.loadSettings(settings, cfg);
+		CubeSettings.loadSettings(settings, cfg);
 		settings.sendPackets = cfg.getBoolean(pathSendPackets, settings.sendPackets);
 		return settings;
 	}

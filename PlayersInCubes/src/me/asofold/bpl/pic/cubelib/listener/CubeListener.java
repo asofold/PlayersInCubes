@@ -1,6 +1,6 @@
-package me.asofold.bpl.pic.listeners;
+package me.asofold.bpl.pic.cubelib.listener;
 
-import me.asofold.bpl.pic.core.AbstractCore;
+import me.asofold.bpl.pic.cubelib.AbstractCubeCore;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -17,15 +17,15 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
- * Listener fitting in with AbstractCore.
+ * Listener fitting in with AbstractCubeCore.
  * @author mc_dev
  *
  */
-public final class CoreListener implements Listener {
+public final class CubeListener implements Listener {
 	
-	private final AbstractCore<?> core;
+	private final AbstractCubeCore<?> core;
 	
-	public CoreListener(AbstractCore<?> core){
+	public CubeListener(AbstractCubeCore<?> core){
 		this.core = core;
 	}
 	
