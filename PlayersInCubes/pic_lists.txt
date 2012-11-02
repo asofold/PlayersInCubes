@@ -186,6 +186,10 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 ! potential bug: checkout renders blind always! so check: what worlds are players in, are they ignored etc.
 
 
+*** EXACT distance (euklidian / still cubes) 
+? CONSIDER NEW PLUGIN: cube/exact hiding based on polling + location heuristic (only update players that actually moved by a lot).
+? add polling method or updating task, listeners register players, checking method delegates (!) [separate registering in world from the cube checking thingy.].
+? add other cube adding method: bigger cubes + calculate exact distance within (needs checking all neighbours.).
 
 VERSION HISTORY
 ----------------------------------

@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import me.asofold.bpl.pic.stats.Stats;
+
 import org.bukkit.entity.Player;
 
 public class PicPlayer {
@@ -23,10 +25,12 @@ public class PicPlayer {
 	public int z;
 	
 	final Player bPlayer;
+	private final Stats stats;
 	
-	public PicPlayer(final Player player){
+	public PicPlayer(final Player player, final Stats stats){
 		this.bPlayer = player;
 		playerName = player.getName();
+		this.stats = stats;
 	}
 
 	/**
@@ -43,7 +47,7 @@ public class PicPlayer {
 		return out;
 	}
 	
-	public  final boolean inRange(final int x, final int y, final int z, final int distLazy) {
+	public final boolean inRange(final int x, final int y, final int z, final int distLazy) {
 		return Math.abs(x - this.x) < distLazy && Math.abs(y - this.y) < distLazy && Math.abs(z - this.z) < distLazy ;
 	}
 
@@ -62,7 +66,7 @@ public class PicPlayer {
 			}
 		}
 		cubes.removeAll(rem);
-		PicCore.stats.addStats(PicCore.idPPRemCubes, rem.size());
+		stats.addStats(PicCore.idPPRemCubes, rem.size());
 		return out;
 	}
 	

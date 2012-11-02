@@ -56,11 +56,6 @@ public class Settings {
 	public long durExpireData = 0;
 	
 	/**
-	 * To send fake packets to keep / remove players in/from the tab player list.
-	 */
-	public boolean sendPackets = true;
-	
-	/**
 	 * Worlds to ignore, exact case.
 	 */
 	public final Set<String> ignoreWorlds = new HashSet<String>();
@@ -72,21 +67,13 @@ public class Settings {
 		toConfig(cfg);
 		return cfg.save();
 	}
-	
-	public static CompatConfig getDefaultConfig(){
-		CompatConfig cfg = CompatConfigFactory.getConfig(null);
-		Settings ref = new Settings();
-		ref.toConfig(cfg);
-		return cfg;
-	}
 
-	private void toConfig(CompatConfig cfg) {
+	public void toConfig(CompatConfig cfg) {
 		cfg.set(pathEnabled, enabled);
 		cfg.set(pathCubeSize, cubeSize);
 		cfg.set(pathDistCube, distCube);
 		cfg.set(pathDistLazy, distLazy);
 		cfg.set(pathDurExpireData, durExpireData / 1000); // Saved in seconds
-		cfg.set(pathSendPackets, sendPackets);
 		cfg.set(pathIgnoreWorlds, new LinkedList<String>(ignoreWorlds));
 	}
 
@@ -95,27 +82,18 @@ public class Settings {
 	 * @param file
 	 * @return
 	 */
-	public static Settings load(File file) {
-		CompatConfig cfg = CompatConfigFactory.getConfig(file);
-		cfg.load();
-		CompatConfig defaults = getDefaultConfig();
-		if (ConfigUtil.forceDefaults(defaults, cfg)){
-			checkFile(file);
-			cfg.save();
-		}
-		Settings settings = new Settings();
+	public static Settings loadSettings(Settings settings, CompatConfig cfg) {
 		Settings ref = new Settings();
 		settings.enabled = cfg.getBoolean(pathEnabled, ref.enabled);
 		settings.cubeSize = cfg.getInt(pathCubeSize, ref.cubeSize);
 		settings.distCube = cfg.getInt(pathDistCube, ref.distCube);
 		settings.distLazy = cfg.getInt(pathDistLazy, ref.distLazy);
 		settings.durExpireData = cfg.getLong(pathDurExpireData, ref.durExpireData / 1000) * 1000; // Saved in seconds
-		settings.sendPackets = cfg.getBoolean(pathSendPackets, ref.sendPackets);
         ConfigUtil.readStringSetFromList(cfg, pathIgnoreWorlds, settings.ignoreWorlds, true, true, false);
 		return settings;
 	}
 
-	private static void checkFile(File file) {
+	public static void checkFile(File file) {
 		if (!file.exists()){
 			file.getParentFile().mkdirs();
 			try {

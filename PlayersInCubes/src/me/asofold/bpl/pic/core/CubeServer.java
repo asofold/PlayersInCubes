@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import me.asofold.bpl.pic.stats.Stats;
+
 /**
  * 
  * @author mc_dev
@@ -15,18 +17,21 @@ public final class CubeServer {
 	
 	private final Map<CubePos, CubeData> cubes = new HashMap<CubePos, CubeData>(500);
 	
+	private final Stats stats;
+	
 	public final Set<String> players = new HashSet<String>();
 	
-	public final PicCore core;
+	public final ICore core;
 
 	public final int cubeSize;
 
 	public final String world;
 	private final Integer idCubes;
 
-	public CubeServer(final String world, final PicCore core, int cubeSize){
+	public CubeServer(final String world, final ICore core, int cubeSize){
 		this.world  = world;
-		idCubes = PicCore.stats.getId("ncubes_" + world, true);
+		stats = core.getStats();
+		idCubes = stats.getId("ncubes_" + world, true);
 		this.core = core;
 		this.cubeSize = cubeSize;
 	}
@@ -50,12 +55,12 @@ public final class CubeServer {
 	}
 
 
-	public final void renderBlind(final PicPlayer pp, final Set<String> names) {
-		core.renderBlind(pp, names);
+	public final void outOfRange(final PicPlayer pp, final Set<String> names) {
+		core.outOfRange(pp, names);
 	}
 	
-	public final void renderSeen(final PicPlayer pp, final Set<String> names) {
-		core.renderSeen(pp, names);
+	public final void inRange(final PicPlayer pp, final Set<String> names) {
+		core.inRange(pp, names);
 	}
 	
 	/**
@@ -65,8 +70,8 @@ public final class CubeServer {
 	 */
 	public final void add(final PicPlayer pp, final boolean blind){
 		if (!players.isEmpty()){
-			if (blind) core.renderBlind(pp, players);
-			else core.renderSeen(pp, players);	
+			if (blind) core.outOfRange(pp, players);
+			else core.inRange(pp, players);	
 		}
 		players.add(pp.playerName);
 	}
@@ -123,16 +128,16 @@ public final class CubeServer {
 				if (!seen.contains(name)) doRem.add(name);
 			}
 			szRem = doRem.size();
-			if (szRem > 0) core.renderBlind(pp, doRem);
+			if (szRem > 0) core.outOfRange(pp, doRem);
 		}
 		else szRem = 0;
 		seen.remove(pp.playerName);
-		if (!seen.isEmpty()) core.renderSeen(pp, seen); // Contains all already seen people, though !
+		if (!seen.isEmpty()) core.inRange(pp, seen); // Contains all already seen people, though !
 		// Add stats:
-		PicCore.stats.addStats(PicCore.idPPCubes, pp.cubes.size());
-		PicCore.stats.addStats(PicCore.idPPSeen, seen.size());
-		PicCore.stats.addStats(PicCore.idPPRemove, szRem);
-		PicCore.stats.addStats(idCubes, cubes.size());
+		stats.addStats(PicCore.idPPCubes, pp.cubes.size());
+		stats.addStats(PicCore.idPPSeen, seen.size());
+		stats.addStats(PicCore.idPPRemove, szRem);
+		stats.addStats(idCubes, cubes.size());
 	}
 	
 }

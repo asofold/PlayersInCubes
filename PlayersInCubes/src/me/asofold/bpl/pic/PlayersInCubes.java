@@ -2,7 +2,7 @@ package me.asofold.bpl.pic;
 
 import me.asofold.bpl.pic.config.Settings;
 import me.asofold.bpl.pic.core.PicCore;
-import me.asofold.bpl.pic.listeners.PicListener;
+import me.asofold.bpl.pic.listeners.CoreListener;
 import me.asofold.bpl.pic.util.Utils;
 
 import org.bukkit.command.Command;
@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PlayersInCubes extends JavaPlugin {
 	
 	private final PicCore core = new PicCore();
-	private final PicListener listener = new PicListener(core);
+	private final CoreListener listener = new CoreListener(core);
 	
 	public PlayersInCubes(){
 		core.setDataFolder(getDataFolder());

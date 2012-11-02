@@ -1,6 +1,6 @@
 package me.asofold.bpl.pic.listeners;
 
-import me.asofold.bpl.pic.core.PicCore;
+import me.asofold.bpl.pic.core.AbstractCore;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -16,12 +16,16 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-
-public final class PicListener implements Listener {
+/**
+ * Listener fitting in with AbstractCore.
+ * @author mc_dev
+ *
+ */
+public final class CoreListener implements Listener {
 	
-	private final PicCore core;
+	private final AbstractCore<?> core;
 	
-	public PicListener(PicCore core){
+	public CoreListener(AbstractCore<?> core){
 		this.core = core;
 	}
 	
