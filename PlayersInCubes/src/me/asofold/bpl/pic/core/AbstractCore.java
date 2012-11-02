@@ -1,7 +1,7 @@
 package me.asofold.bpl.pic.core;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import me.asofold.bpl.pic.config.Settings;
@@ -23,12 +23,12 @@ public abstract class AbstractCore<S extends Settings> implements ICore{
 	/**
 	 * World specific CubeServer. Every world must have one to keep track of players inside of worlds.
 	 */
-	protected final Map<String, CubeServer> cubeServers = new HashMap<String, CubeServer>(53);
+	protected final Map<String, CubeServer> cubeServers = new LinkedHashMap<String, CubeServer>(53);
 	 
 	/**
 	 * Player specific data / lookup.
 	 */
-	protected final Map<String, PicPlayer> players = new HashMap<String, PicPlayer>(517);
+	protected final Map<String, PicPlayer> players = new LinkedHashMap<String, PicPlayer>(517);
 	
 	public AbstractCore(S settings){
 		this.settings = settings;

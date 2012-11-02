@@ -1,6 +1,7 @@
 package me.asofold.bpl.pic.core;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class PicPlayer {
 	/**
 	 * Cubes the player is registered in.
 	 */
-	public final Set<CubeData> cubes = new HashSet<CubeData>();
+	public final Set<CubeData> cubes = new LinkedHashSet<CubeData>();
 	
 	public final String playerName;
 	

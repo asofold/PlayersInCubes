@@ -1,6 +1,6 @@
 package me.asofold.bpl.pic.core;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -11,7 +11,7 @@ import java.util.Set;
 public final class CubeData {
 	
 	
-	public final Set<String> canView = new HashSet<String>();
+	public final Set<String> canView = new LinkedHashSet<String>();
 //	public final Set<String> inside = new HashSet<String>();
 	
 	public final Cube cube;
