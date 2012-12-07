@@ -7,12 +7,10 @@ import me.asofold.bpl.pic.config.PicSettings;
 import me.asofold.bpl.pic.cubelib.AbstractCubeCore;
 import me.asofold.bpl.pic.cubelib.server.CubePlayer;
 import me.asofold.bpl.pic.stats.Stats;
-import net.minecraft.server.Packet201PlayerInfo;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 /**
  * Core functionality.
@@ -24,6 +22,8 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	private static final Stats stats = new Stats("[PIC]");
 	
 	private File dataFolder = null;
+	
+//	private final EntityTracker entityTracker = new EntityTracker(this);
 	
 	public PicCore() {
 		super(new PicSettings());
@@ -65,9 +65,11 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	
 	public final void hidePlayer(final Player player, final Player playerToHide){
 		player.hidePlayer(playerToHide);
-		if (settings.sendPackets) ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(playerToHide.getPlayerListName(), true, 9999));
+		if (settings.sendPackets){
+			sendAllPacket201(player, true);
+		}
 	}
-	
+
 	@Override
 	public final void checkOut(final Player player) {
 		if (!enabled) return;
@@ -89,10 +91,36 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public final void onQuit(final Player player) {
 		super.onQuit(player);
 		if (settings.sendPackets){
-			final String listName = player.getPlayerListName();
-			// TODO: this remains fishy, somewhat.
-			((CraftServer) Bukkit.getServer()).getHandle().sendAll(new Packet201PlayerInfo(listName, false, 9999));
+			sendAllPacket201(player, false);
 		}
+	}
+	
+	public boolean sendAllPacket201(final Player player, final boolean online){
+		return sendAllPacket201(player, player.getPlayerListName(), online);
+	}
+	
+	public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online){
+		return sendAllPacket201(player, playerListName, online, 9999);
+	}
+	
+	public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online, final int ping) {
+		// TODO: this remains fishy, somewhat.
+		try{
+			// CB2511
+			((org.bukkit.craftbukkit.entity.CraftPlayer) player).getHandle().netServerHandler.sendPacket(
+					new net.minecraft.server.Packet201PlayerInfo(playerListName, online, ping));
+			return true;
+		}
+		catch(Throwable t1){
+			try{
+				// CB2512 +
+				((org.bukkit.craftbukkit.v1_4_5.entity.CraftPlayer) player).getHandle().netServerHandler.sendPacket(
+						new net.minecraft.server.v1_4_5.Packet201PlayerInfo(playerListName, online, ping));
+				return true;
+			}
+			catch(Throwable t2){};
+		}
+		return false;
 	}
 	
 	/**
@@ -139,5 +167,36 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public final Stats getStats(){
 		return stats;
 	}
+
+	@Override
+	public void applySettings(PicSettings settings) {
+		super.applySettings(settings);
+//		entityTracker.applySettings(settings);
+	}
+	
+	
+	
+	@Override
+	public void clear(boolean blind) {
+		super.clear(blind);
+//		entityTracker.clear();
+	}
+
+	/**
+	 * To be called in onEnable.
+	 * @param canTrackEntities
+	 * @return
+	 */
+	public Listener[] getExtraListeners(boolean canTrackEntities){
+		
+//		if (canTrackEntities) return new Listener[]{entityTracker.getListener()};
+		
+		return new Listener[0];
+		
+	}
+	
+//	public EntityTracker getEntityTracker(){
+//		return entityTracker;
+//	}
 	
 }

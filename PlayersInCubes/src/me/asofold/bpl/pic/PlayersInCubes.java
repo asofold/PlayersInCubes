@@ -7,6 +7,8 @@ import me.asofold.bpl.pic.util.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PlayersInCubes extends JavaPlugin {
@@ -14,8 +16,23 @@ public final class PlayersInCubes extends JavaPlugin {
 	private final PicCore core = new PicCore();
 	private final CubeListener listener = new CubeListener(core);
 	
+	private boolean hasEntityTracker = false;
+	
+	private final boolean canTrackEntities = false; // TODO
+	
 	public PlayersInCubes(){
 		core.setDataFolder(getDataFolder());
+	}
+
+	@Override
+	public void onLoad() {
+		// Try to hook into ProtocolLib.
+		try{
+//			new HookProtocolLib().setup(this, core.getEntityTracker());
+//			hasEntityTracker = true;
+//			System.out.println("[PIC] (" + getDescription().getFullName() +") Hooked into ProtocolLib.");
+		}
+		catch (Throwable t){}
 	}
 
 	@Override
@@ -28,7 +45,13 @@ public final class PlayersInCubes extends JavaPlugin {
 	public final void onEnable() {
 		core.setDataFolder(getDataFolder());
 		core.reload();
-		getServer().getPluginManager().registerEvents(listener, this);
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(listener, this);
+		if (hasEntityTracker){
+			for (Listener listener : core.getExtraListeners(canTrackEntities)){
+				pm.registerEvents(listener, this);
+			}
+		}
 		System.out.println("[PIC] " + getDescription().getFullName() +" is now enabled.");
 	}
 	
