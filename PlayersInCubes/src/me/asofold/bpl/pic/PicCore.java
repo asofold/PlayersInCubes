@@ -6,6 +6,8 @@ import java.util.Collection;
 import me.asofold.bpl.pic.config.PicSettings;
 import me.asofold.bpl.pic.cubelib.AbstractCubeCore;
 import me.asofold.bpl.pic.cubelib.server.CubePlayer;
+import me.asofold.bpl.pic.net.SendPacketsFactory;
+import me.asofold.bpl.pic.net.SendPacketsFactory.SendPackets;
 import me.asofold.bpl.pic.stats.Stats;
 
 import org.bukkit.Bukkit;
@@ -23,10 +25,13 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	
 	private File dataFolder = null;
 	
+	private final SendPackets sendPackets;
+	
 //	private final EntityTracker entityTracker = new EntityTracker(this);
 	
 	public PicCore() {
 		super(new PicSettings());
+		sendPackets = new SendPacketsFactory().getSendPackets();
 	}
 	
 	public final void setDataFolder(final File dataFolder) {
@@ -105,22 +110,7 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	
 	public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online, final int ping) {
 		// TODO: this remains fishy, somewhat.
-		try{
-			// CB2511
-			((org.bukkit.craftbukkit.entity.CraftPlayer) player).getHandle().netServerHandler.sendPacket(
-					new net.minecraft.server.Packet201PlayerInfo(playerListName, online, ping));
-			return true;
-		}
-		catch(Throwable t1){
-			try{
-				// CB2512 +
-				((org.bukkit.craftbukkit.v1_4_5.entity.CraftPlayer) player).getHandle().netServerHandler.sendPacket(
-						new net.minecraft.server.v1_4_5.Packet201PlayerInfo(playerListName, online, ping));
-				return true;
-			}
-			catch(Throwable t2){};
-		}
-		return false;
+		return sendPackets.sendAllPacket201(player, playerListName, online, ping);
 	}
 	
 	/**
