@@ -37,7 +37,7 @@ public abstract class AbstractCubeCore<S extends CubeSettings> implements ICubeC
 		this.settings = settings;
 	}
 	
-	public final void applySettings(final S settings) {
+	public void applySettings(final S settings) {
 		// Later: maybe try for a lazy transition or a hard one depending on changes.
 		this.settings = settings;
 		cleanup();
@@ -60,7 +60,7 @@ public abstract class AbstractCubeCore<S extends CubeSettings> implements ICubeC
 		checkAllOnlinePlayers();
 	}
 	
-	public final void clear(final boolean blind){
+	public void clear(final boolean blind){
 		removeAllPlayers(blind);
 		for (final CubeServer server : cubeServers.values()){
 			server.clear();
@@ -138,13 +138,22 @@ public abstract class AbstractCubeCore<S extends CubeSettings> implements ICubeC
 	 * @param player
 	 * @return
 	 */
-	private final CubePlayer getCubePlayer(final Player player){
+	public final CubePlayer getCubePlayer(final Player player){
 		final String name = player.getName();
 		final CubePlayer pp = players.get(name);
 		if (pp != null) return pp;
 		final CubePlayer npp = new CubePlayer(player, getStats());
 		players.put(name, npp);
 		return npp;
+	}
+	
+	/**
+	 * Get CubePlayer, if present.
+	 * @param name (exact case)
+	 * @return CubePlayer instance or null.
+	 */
+	public final CubePlayer getCubePlayer(String name){
+		return players.get(name);
 	}
 	
 	/**
