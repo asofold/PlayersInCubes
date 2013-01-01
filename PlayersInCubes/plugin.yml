@@ -1,6 +1,6 @@
 name: PlayersInCubes
 main: me.asofold.bpl.pic.PlayersInCubes
-version: 2.2.0
+version: 2.2.1
 
 commands:
   playersincubes:
