@@ -71,7 +71,7 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public final void hidePlayer(final Player player, final Player playerToHide){
 		player.hidePlayer(playerToHide);
 		if (settings.sendPackets){
-			sendAllPacket201(player, true);
+			sendPacket201(player, playerToHide.getName(), true);
 		}
 	}
 
@@ -96,21 +96,21 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public final void onQuit(final Player player) {
 		super.onQuit(player);
 		if (settings.sendPackets){
-			sendAllPacket201(player, false);
+			final String playerName = player.getName();
+			for (final Player other : Bukkit.getServer().getOnlinePlayers()){
+				// Heuristic, somewhat.
+				if (!other.canSee(player)) sendPacket201(other, playerName, false);
+			}
 		}
 	}
 	
-	public boolean sendAllPacket201(final Player player, final boolean online){
-		return sendAllPacket201(player, player.getPlayerListName(), online);
+	public boolean sendPacket201(final Player player, final String playerListName, final boolean online){
+		return sendPacket201(player, playerListName, online, 9999);
 	}
 	
-	public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online){
-		return sendAllPacket201(player, playerListName, online, 9999);
-	}
-	
-	public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online, final int ping) {
+	public boolean sendPacket201(final Player player, final String playerListName, final boolean online, final int ping) {
 		// TODO: this remains fishy, somewhat.
-		return sendPackets.sendAllPacket201(player, playerListName, online, ping);
+		return sendPackets.sendPacket201(player, playerListName, online, ping);
 	}
 	
 	/**

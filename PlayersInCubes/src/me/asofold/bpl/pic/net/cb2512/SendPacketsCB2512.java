@@ -7,7 +7,7 @@ import me.asofold.bpl.pic.net.SendPacketsFactory.SendPackets;
 public class SendPacketsCB2512 implements SendPackets {
 
 	@Override
-	public boolean sendAllPacket201(Player player, String playerListName, boolean online, int ping)
+	public boolean sendPacket201(Player player, String playerListName, boolean online, int ping)
 	{
 		try{
 			// CB2512 +

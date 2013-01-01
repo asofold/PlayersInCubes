@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 public class SendPacketsCB2545 implements SendPackets{
 
 	@Override
-	public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online, final int ping)
+	public boolean sendPacket201(final Player player, final String playerListName, final boolean online, final int ping)
 	{
 		try{
 			// CB2545

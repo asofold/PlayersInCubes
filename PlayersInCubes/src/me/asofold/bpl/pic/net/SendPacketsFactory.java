@@ -4,12 +4,12 @@ import org.bukkit.entity.Player;
 
 public class SendPacketsFactory {
 	public static interface SendPackets{
-		public boolean sendAllPacket201(final Player player, final String playerListName, final boolean online, final int ping);
+		public boolean sendPacket201(final Player player, final String playerListName, final boolean online, final int ping);
 	}
 	
 	private static SendPackets dummySendPackets = new SendPackets() {
 		@Override
-		public boolean sendAllPacket201(Player player, String playerListName, boolean online, int ping)
+		public boolean sendPacket201(Player player, String playerListName, boolean online, int ping)
 		{
 			return false;
 		}
