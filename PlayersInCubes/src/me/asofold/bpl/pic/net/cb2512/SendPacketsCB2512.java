@@ -1,10 +1,14 @@
 package me.asofold.bpl.pic.net.cb2512;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.asofold.bpl.pic.net.SendPacketsFactory.SendPackets;
 
 public class SendPacketsCB2512 implements SendPackets {
+	public SendPacketsCB2512(){
+		((org.bukkit.craftbukkit.v1_4_5.CraftServer) Bukkit.getServer()).getCommandMap();
+	}
 
 	@Override
 	public boolean sendPacket201(Player player, String playerListName, boolean online, int ping)

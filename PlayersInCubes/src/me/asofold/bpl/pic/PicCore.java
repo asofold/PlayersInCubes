@@ -32,6 +32,7 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public PicCore() {
 		super(new PicSettings());
 		sendPackets = new SendPacketsFactory().getSendPackets();
+		Bukkit.getLogger().info("[PIC] Packet sending set to: " + sendPackets.getClass().getSimpleName());
 	}
 	
 	public final void setDataFolder(final File dataFolder) {
