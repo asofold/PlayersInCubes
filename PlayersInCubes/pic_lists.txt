@@ -191,43 +191,7 @@ change renderAllBlind etc to only check vs. the players in that world ? [but: ?c
 ? add polling method or updating task, listeners register players, checking method delegates (!) [separate registering in world from the cube checking thingy.].
 ? add other cube adding method: bigger cubes + calculate exact distance within (needs checking all neighbours.).
 
-VERSION HISTORY
-----------------------------------
 
-(2.1.2)
-- (bugfix) Potential fix: Check against pp.playerName, not Player.
-
-(2.1.1)
-- (bugfix) Send packets to all players if a player quits.
-- (change) Configuration path for send-packets: packets.enabled
-
-(2.1.0)
-- (add) Send fake packets to make players names show up in the list, though hidden.
-
-(2.0.0)
-- (CHANGE) Packet naming.
-
-(1.2.1)
-- (bugfix) npe.
-
-(1.2.0)
-- (add) Version to info message.
-- (bugfix) Potentially fixed treatment of (ignored) worlds.
-- (adjust) Some internal tweaks/cleanups.
-
-(1.1.1)
-- (bugfix) Save settings if enable or disable is used + correct messages and behavior.
-- (adjust) Try to create folders and an empty file, if not existent.
-- (bugfix) Stats keys for worlds in CubeServer.
-- (update) Stats: final rage
-- (add) Stats: Removed cubes for players.
-- (adjust) Names of stats entries.
-
-(1.1.0)
-- (add) Option to ignore worlds.
-
-(1.0.0) *** Initial version.
-
-
-
+*** ------------
+? Switch to coordmap from NCP for less object creation ?
 
