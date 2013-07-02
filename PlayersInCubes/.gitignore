@@ -3,3 +3,4 @@
 /.project
 /jar_desc.jardesc
 /graveyard
+*.class
