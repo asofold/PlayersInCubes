@@ -72,7 +72,7 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public final void hidePlayer(final Player player, final Player playerToHide){
 		player.hidePlayer(playerToHide);
 		if (settings.sendPackets){
-			sendPacket201(player, playerToHide.getName(), true);
+			sendPacket201(player, playerToHide.getPlayerListName(), true);
 		}
 	}
 
@@ -97,10 +97,12 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	public final void onQuit(final Player player) {
 		super.onQuit(player);
 		if (settings.sendPackets){
-			final String playerName = player.getName();
+			final String playerListName = player.getPlayerListName();
 			for (final Player other : Bukkit.getServer().getOnlinePlayers()){
 				// Heuristic, somewhat.
-				if (!other.canSee(player)) sendPacket201(other, playerName, false);
+				if (!other.canSee(player)) {
+					sendPacket201(other, playerListName, false);
+				}
 			}
 		}
 	}
