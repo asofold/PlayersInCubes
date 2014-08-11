@@ -123,9 +123,9 @@ public final class PicCore extends AbstractCubeCore<PicSettings>{
 	protected final void removeAllPlayers(final boolean outOfRange) {
 		if (!outOfRange){
 			// Costly: basically quadratic time all vs. all.
-			final Player[] online = Bukkit.getOnlinePlayers();
-			for (final CubePlayer pp : players.values()){
-				for (final Player other : online){
+			final Collection<CubePlayer> cubePlayers = players.values();
+			for (final Player other : Bukkit.getOnlinePlayers()) {
+				for (final CubePlayer pp : cubePlayers){
 					if (!other.canSee(pp.bPlayer)) other.showPlayer(pp.bPlayer);
 					if (!pp.bPlayer.canSee(other)) pp.bPlayer.showPlayer(other);
 				}
