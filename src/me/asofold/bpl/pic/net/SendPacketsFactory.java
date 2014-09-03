@@ -17,6 +17,12 @@ public class SendPacketsFactory {
 
 	public SendPackets getSendPackets() {
 		try{
+			return new me.asofold.bpl.pic.net.cb3100.SendPacketsCB3100();
+		} catch(Throwable t){};
+		try{
+			return new me.asofold.bpl.pic.net.cb3043.SendPacketsCB3043();
+		} catch(Throwable t){};
+		try{
 			return new me.asofold.bpl.pic.net.cb3026.SendPacketsCB3026();
 		} catch(Throwable t){};
 		try{
