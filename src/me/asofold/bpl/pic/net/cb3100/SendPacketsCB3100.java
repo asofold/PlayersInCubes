@@ -1,5 +1,7 @@
 package me.asofold.bpl.pic.net.cb3100;
 
+import java.util.logging.Level;
+
 import me.asofold.bpl.pic.net.SendPacketsFactory.SendPackets;
 
 import org.bukkit.Bukkit;
@@ -21,7 +23,10 @@ public class SendPacketsCB3100 implements SendPackets {
 					);
 			return true;
 		}
-		catch(Throwable t1){}
+		catch(Throwable t1){
+			// TODO: Fails !
+			Bukkit.getLogger().log(Level.WARNING, "[PlayersInCubes] Could not send packet: ", t1);
+		}
 		return false;
 	}
 
